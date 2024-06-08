@@ -10,8 +10,8 @@ import 'package:instagram_clone/screens/specificpost.dart';
 
 class ProfileScreen extends StatefulWidget {
   String profileName;
-  String imageurl;
-  ProfileScreen(this.profileName, this.imageurl);
+  String imageURL;
+  ProfileScreen(this.profileName, this.imageURL);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -145,7 +145,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         children: [
                           CircleAvatar(
                             radius: 30,
-                            backgroundImage: NetworkImage(widget.imageurl),
+                            backgroundImage: NetworkImage(widget.imageURL),
                           ),
                           SizedBox(
                             width: 10,
@@ -318,7 +318,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                         width: 4),
                                                     image: DecorationImage(
                                                         image: NetworkImage(
-                                                            widget.imageurl),
+                                                            widget.imageURL),
                                                         fit: BoxFit.cover)),
                                               ),
                                             )),
@@ -513,9 +513,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               indicatorColor: Colors.white,
                               tabs: [
                                 Tab(
-                                  icon: Icon(Icons.grid_on_outlined),
+                                  icon: Icon(Icons.grid_on_outlined , color: Colors.white),
                                 ),
-                                Tab(icon: Icon(Icons.assignment_ind_outlined))
+                                Tab(icon: Icon(Icons.assignment_ind_outlined , color: Colors.white))
                               ],
                             ),
                             SizedBox(
