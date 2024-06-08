@@ -4,8 +4,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:instagram_clone/utils/storiesWidget.dart';
-import 'package:instagram_clone/utils/feeds_section.dart';
+import 'package:instagram_clone/utils/StoriesWidget.dart';
+import 'package:instagram_clone/utils/Feeds.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -77,48 +77,51 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: GestureDetector(
-            onTap: _showPopupMenu,
-            child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-              Text("Instagram",
-                  style: TextStyle(fontFamily: 'insta_head', fontSize: 33)),
-              Icon(
-                Icons.keyboard_arrow_down_rounded,
-                size: 24,
-                color: Colors.white,
-              )
-            ])),
-        // leading: Padding(
-        //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        //   child: Placeholder(color: Colors.white,),
-        // ),
-        // leadingWidth: 400,
-        backgroundColor: Colors.black,
-        actions: [
-          IconButton(
-              onPressed: null,
-              icon: FaIcon(
-                Icons.add_box_outlined,
-                color: Colors.white,
-              )),
-          IconButton(
-              tooltip: 'chat',
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Instagram chat')));
-              },
-              icon: FaIcon(
-                FeatherIcons.send,
-                color: Colors.white,
-              ))
-        ],
-      ),
       body: SingleChildScrollView(
           child: Container(
             decoration: BoxDecoration(color: Colors.black),
             child: Column(
               children: [
+                AppBar(
+                  title: GestureDetector(
+                      onTap: _showPopupMenu,
+                      child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                        Text("Instagram",
+                            style: TextStyle(fontFamily: 'insta_head', fontSize: 33 , color: Colors.white)),
+                        Icon(
+                          Icons.keyboard_arrow_down_rounded,
+                          size: 24,
+                          color: Colors.white,
+                        )
+                      ])),
+                  // leading: Padding(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  //   child: Placeholder(color: Colors.white,),
+                  // ),
+                  // leadingWidth: 400,
+                  backgroundColor: Colors.black,
+                  actions: [
+                    IconButton(
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Notifications : Not Implemented Yet😊')));
+                        },
+                        icon: FaIcon(
+                          FontAwesomeIcons.heart,
+                          color: Colors.white,
+                        )),
+                    IconButton(
+                        tooltip: 'chat',
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Chat : Not Implemented Yet😊')));
+                        },
+                        icon: FaIcon(
+                          FeatherIcons.send,
+                          color: Colors.white,
+                        ))
+                  ],
+                ),
                 SizedBox(
                   height: 10,
                 ),

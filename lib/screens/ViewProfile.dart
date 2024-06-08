@@ -5,7 +5,7 @@ import 'dart:math';
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:instagram_clone/screens/specificpost.dart';
+import 'package:instagram_clone/screens/SpecificPost.dart';
 
 class ViewProfile extends StatefulWidget {
   String profileName;

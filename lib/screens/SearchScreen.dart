@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:instagram_clone/screens/specificpost.dart';
-import 'package:instagram_clone/sources/video_source.dart';
-import 'package:instagram_clone/utils/video_controller.dart';
+import 'package:instagram_clone/screens/SpecificPost.dart';
+import 'package:instagram_clone/sources/VideoSource.dart';
+import 'package:instagram_clone/utils/VideoController.dart';
 
 
 class SearchScreen extends StatefulWidget {

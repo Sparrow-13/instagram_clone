@@ -3,7 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:instagram_clone/utils/stories_data.dart';
+import 'package:instagram_clone/sources/StoriesSource.dart';
 
 class Stories extends StatelessWidget {
   const Stories({Key? key}) : super(key: key);

@@ -1,22 +1,24 @@
 // ignore_for_file: file_names, prefer_typing_uninitialized_variables, use_key_in_widget_constructors
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:instagram_clone/utils/postIcons.dart';
-import 'package:instagram_clone/utils/video_controller.dart';
+import 'package:instagram_clone/utils/PostIcons.dart';
+import 'package:instagram_clone/utils/VideoController.dart';
 
-import '../sources/video_source.dart';
-import 'name_section.dart';
+import '../sources/VideoSource.dart';
+import 'NameSection.dart';
 
 class PostModel extends StatefulWidget {
-  final profilename;
+  final profileName;
   final bool isVideoUrl;
-  final int urlsource;
+  final int urlSource;
   final videoUrl;
 
   const PostModel(
-      {this.profilename,
+      {this.profileName,
       required this.isVideoUrl,
-      required this.urlsource,
+      required this.urlSource,
       this.videoUrl});
 
   @override
@@ -39,10 +41,10 @@ class _PostModelState extends State<PostModel> {
                 ? SizedBox(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.width,
-                    child: VideoController(videosUrl[widget.urlsource % 6]))
+                    child: VideoController(videosUrl[widget.urlSource % 6]))
                 : Image(
                     image: NetworkImage(
-                        "https://picsum.photos/seed/${widget.urlsource}/400/400"),
+                        "https://picsum.photos/seed/${widget.urlSource}/400/400"),
                     width: MediaQuery.of(context).size.width,
                     fit: BoxFit.cover,
                   ),
@@ -50,29 +52,36 @@ class _PostModelState extends State<PostModel> {
         ]),
         PostIcons(key: globalKey),
         Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
+            padding: EdgeInsets.symmetric(horizontal: 12),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              SizedBox(
-                height: 5,
-              ),
+              // SizedBox(
+              //   height: 5,
+              // ),
               Text(
-                "11,536 likes",
+                "${Random().nextInt(10000)} likes",
                 style: GoogleFonts.roboto(
-                    color: Colors.white,
+                    color: Colors.grey,
                     fontSize: 14,
                     fontWeight: FontWeight.bold),
               ),
-              SizedBox(
-                height: 5,
-              ),
+              // SizedBox(
+              //   height: 5,
+              // ),
               Text(
-                "akashbanerjee 👷‍♀️",
+                "SomeRandom_1829",
                 style: GoogleFonts.roboto(
-                    color: Colors.white,
+                    color: Colors.grey,
                     fontSize: 14,
                     fontWeight: FontWeight.bold),
               ),
+                  Text(
+                    "Some Random Caption for beautiful picture",
+                    style: GoogleFonts.roboto(
+                        color: Colors.grey,
+                        fontSize: 14),
+                  ),
+
               SizedBox(
                 height: 5,
               ),

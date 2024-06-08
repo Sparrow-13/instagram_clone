@@ -2,17 +2,17 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:instagram_clone/utils/FakeInfo.dart';
-import 'package:instagram_clone/utils/stories_data.dart';
+import 'package:instagram_clone/utils/Person.dart';
+import 'package:instagram_clone/sources/StoriesSource.dart';
 
-class SharePost extends StatefulWidget {
-  const SharePost({Key? key}) : super(key: key);
+class SharePostBottomSheet extends StatefulWidget {
+  const SharePostBottomSheet({Key? key}) : super(key: key);
 
   @override
-  State<SharePost> createState() => _SharePostState();
+  State<SharePostBottomSheet> createState() => _SharePostBottomSheetState();
 }
 
-class _SharePostState extends State<SharePost> {
+class _SharePostBottomSheetState extends State<SharePostBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -67,7 +67,7 @@ class _SharePostState extends State<SharePost> {
                         children: [
                           CircleAvatar(
                             radius: 30,
-                            backgroundImage: NetworkImage(FakeInfo().imgurl),
+                            backgroundImage: NetworkImage(PersonGenerator().imgurl),
                           ),
                           SizedBox(
                             width: 10,
@@ -75,13 +75,13 @@ class _SharePostState extends State<SharePost> {
                           Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(FakeInfo().profile_name.trim(),
+                              Text(PersonGenerator().profile_name.trim(),
                                   style: GoogleFonts.roboto(
                                       fontSize: 15,
                                       color:
                                           Color.fromARGB(255, 202, 202, 202))),
                               Text(
-                                "@${FakeInfo().profile_name.trim()}",
+                                "@${PersonGenerator().profile_name.trim()}",
                                 style: GoogleFonts.roboto(
                                     fontSize: 15,
                                     color: Color.fromARGB(255, 126, 126, 126)),

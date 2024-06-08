@@ -4,11 +4,10 @@ import 'dart:math';
 
 import 'package:faker/faker.dart';
 
-class FakeInfo {
+class PersonGenerator {
   String ProfileImage_url = "https://randomuser.me/api/portraits/";
   late String imgurl = RandomProfileImage();
   RandomProfileImage() {
-
     int rand = Random().nextInt(50);
     if (rand % 2 == 0) {
       return "$ProfileImage_url/women/$rand.jpg";

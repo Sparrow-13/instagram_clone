@@ -2,8 +2,8 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:instagram_clone/utils/postModel.dart';
-import 'package:instagram_clone/utils/stories_data.dart';
+import 'package:instagram_clone/utils/PostModel.dart';
+import 'package:instagram_clone/sources/StoriesSource.dart';
 
 
 class Feeds extends StatefulWidget {
@@ -16,7 +16,7 @@ class _FeedsState extends State<Feeds> {
   Widget build(BuildContext context) {
     return Column(
       children: List.generate(storyList.length, (index) {
-        return PostModel(isVideoUrl: false, urlsource: index , );
+        return PostModel(isVideoUrl: false, urlSource: index , );
       }),
     );
   }

@@ -13,12 +13,12 @@ class _BottomModalMenuState extends State<BottomModalMenu> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 430,
+      height: 400,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           SizedBox(
-            height: 10,
+            height: 20,
           ),
           Container(
             width: 40,
@@ -28,7 +28,7 @@ class _BottomModalMenuState extends State<BottomModalMenu> {
                 borderRadius: BorderRadius.circular(15)),
           ),
           SizedBox(
-            height: 20,
+            height: 5,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
