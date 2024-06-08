@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:instagram_clone/utils/share_post.dart';
+import 'package:instagram_clone/utils/SharePostBottomSheet.dart';
 import 'dart:math' as math;
 
 class PostIcons extends StatefulWidget {
@@ -46,7 +46,7 @@ class PostIconsState extends State<PostIcons> {
           // we set up a container inside which
           // we create center column and display text
           // Returning SizedBox instead of a Container
-          return SharePost();
+          return SharePostBottomSheet();
         });
     // });
   }

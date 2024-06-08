@@ -6,8 +6,8 @@ import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:instagram_clone/screens/viewProfile.dart';
-import 'package:instagram_clone/utils/bottom_modal.dart';
+import 'package:instagram_clone/screens/ViewProfile.dart';
+import 'package:instagram_clone/utils/BottamModal.dart';
 
 class NameSection extends StatefulWidget {
   @override
@@ -15,7 +15,7 @@ class NameSection extends StatefulWidget {
   NameSection();
 
   String ProfileImage_url = "https://randomuser.me/api/portraits/";
-  late String imgurl = RandomProfileImage();
+  late String imageURL = RandomProfileImage();
   RandomProfileImage() {
 
     int rand = Random().nextInt(50);
@@ -44,9 +44,7 @@ class _NameSectionState extends State<NameSection> {
           ),
           context: context,
           builder: (BuildContext context) {
-            // we set up a container inside which
-            // we create center column and display text
-            // Returning SizedBox instead of a Container
+
             return BottomModalMenu();
           });
     });
@@ -55,15 +53,15 @@ class _NameSectionState extends State<NameSection> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical:5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
             children: [
               SizedBox(
-                  width: 45,
-                  height: 45,
+                  width: 35,
+                  height: 35,
                   child: Stack(
                     children: [
                       Container(
@@ -83,15 +81,15 @@ class _NameSectionState extends State<NameSection> {
                           child: Padding(
                             padding: EdgeInsets.all(2),
                             child: Container(
-                              width: 45,
-                              height: 45,
+                              width: 35,
+                              height: 35,
                               decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   border:
                                       Border.all(color: Colors.black, width: 3),
                                   image: DecorationImage(
                                       image: NetworkImage(
-                                        widget.imgurl,
+                                        widget.imageURL,
                                       ),
                                       fit: BoxFit.cover)),
                             ),
@@ -110,12 +108,13 @@ class _NameSectionState extends State<NameSection> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => ViewProfile(
-                                  widget.profile_name, widget.imgurl)),
+                                  widget.profile_name, widget.imageURL)),
                         );
                       },
                       child: Text(widget.profile_name,
                           style: GoogleFonts.roboto(
                               color: Colors.white,
+                              fontSize: 13,
                               fontWeight: FontWeight.bold)),
                     ),
                     SizedBox(width: 5),

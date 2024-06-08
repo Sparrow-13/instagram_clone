@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:instagram_clone/sources/video_source.dart';
-import 'package:instagram_clone/utils/video_controller.dart';
+import 'package:instagram_clone/sources/VideoSource.dart';
+import 'package:instagram_clone/utils/VideoController.dart';
 
 class ReelsScreen extends StatefulWidget {
   const ReelsScreen({Key? key}) : super(key: key);

@@ -1,7 +1,7 @@
 // ignore_for_file: use_key_in_widget_constructors
 
 import 'package:flutter/material.dart';
-import 'package:instagram_clone/utils/postModel.dart';
+import 'package:instagram_clone/utils/PostModel.dart';
 
 class ViewSpecifiPost extends StatefulWidget {
   final int urlIndex;
@@ -20,7 +20,7 @@ class _ViewSpecifiPostState extends State<ViewSpecifiPost> {
         body: Container(
             color: Colors.black,
             child: PostModel(
-              urlsource: widget.urlIndex,
+              urlSource: widget.urlIndex,
               isVideoUrl: widget.isVideoIndex,
             )));
   }

@@ -3,15 +3,15 @@
 import 'dart:math';
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:instagram_clone/screens/specificpost.dart';
+import 'package:instagram_clone/screens/SpecificPost.dart';
 
 class ProfileScreen extends StatefulWidget {
   String profileName;
-  String imageurl;
-  ProfileScreen(this.profileName, this.imageurl);
+  String imageURL;
+
+  ProfileScreen(this.profileName, this.imageURL);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -23,6 +23,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   int images_length = 1 + Random().nextInt(99);
 
   String ProfileImage_url = "https://randomuser.me/api/portraits/";
+
   toggleShowFriends() {
     setState(() {
       showFriendsSuggestions = !showFriendsSuggestions;
@@ -50,6 +51,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   var _flag = true;
+
   Widget Suggestion_card() {
     return Padding(
       padding: const EdgeInsets.only(right: 10),
@@ -145,7 +147,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         children: [
                           CircleAvatar(
                             radius: 30,
-                            backgroundImage: NetworkImage(widget.imageurl),
+                            backgroundImage: NetworkImage(widget.imageURL),
                           ),
                           SizedBox(
                             width: 10,
@@ -237,16 +239,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   FaIcon(
                     FontAwesomeIcons.lock,
                     size: 12,
+                    color: Colors.grey,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),
                     child: Text("${widget.profileName.replaceAll(' ', '')}_14",
-                        style: GoogleFonts.roboto(fontSize: 18)),
+                        style: GoogleFonts.roboto(
+                            fontSize: 15,
+                            color: Colors.grey,
+                            fontWeight: FontWeight.bold)),
                   ),
                   Icon(
                     Icons.keyboard_arrow_down_rounded,
                     size: 24,
-                    color: Colors.white,
+                    color: Colors.grey,
                   )
                 ])),
             // leading: Padding(
@@ -257,7 +263,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             backgroundColor: Colors.black,
             actions: [
               IconButton(
-                  onPressed: null,
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content:
+                            Text('Create View : Not Implemented Yet😊')));
+                  },
                   icon: FaIcon(
                     Icons.add_box_outlined,
                     color: Colors.white,
@@ -265,7 +275,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               IconButton(
                   onPressed: null,
                   icon: FaIcon(
-                    FeatherIcons.moreHorizontal,
+                    FontAwesomeIcons.bars,
                     color: Colors.white,
                   ))
             ],
@@ -318,7 +328,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                         width: 4),
                                                     image: DecorationImage(
                                                         image: NetworkImage(
-                                                            widget.imageurl),
+                                                            widget.imageURL),
                                                         fit: BoxFit.cover)),
                                               ),
                                             )),
@@ -450,6 +460,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 SizedBox(
                                   width: 5,
                                 ),
+                                Expanded(
+                                    child: InkWell(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(6),
+                                        color: Colors.grey[850]),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Center(
+                                          child: Text(
+                                        "Share Profile",
+                                        style: GoogleFonts.roboto(
+                                            color: Colors.white),
+                                      )),
+                                    ),
+                                  ),
+                                )),
+                                SizedBox(
+                                  width: 5,
+                                ),
                                 InkWell(
                                   onTap: toggleShowFriends,
                                   child: Container(
@@ -513,9 +543,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               indicatorColor: Colors.white,
                               tabs: [
                                 Tab(
-                                  icon: Icon(Icons.grid_on_outlined),
+                                  icon: Icon(Icons.grid_on_outlined,
+                                      color: Colors.white),
                                 ),
-                                Tab(icon: Icon(Icons.assignment_ind_outlined))
+                                Tab(
+                                    icon: Icon(Icons.assignment_ind_outlined,
+                                        color: Colors.white))
                               ],
                             ),
                             SizedBox(
@@ -526,7 +559,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   child: GridView.builder(
                                       primary: false,
                                       // padding: const EdgeInsets.all(20),
-
                                       shrinkWrap: true,
                                       physics: NeverScrollableScrollPhysics(),
                                       itemCount: images_length,
