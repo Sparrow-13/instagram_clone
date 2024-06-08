@@ -9,7 +9,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart'
     show FaIcon, FontAwesomeIcons;
 
 import 'NotificationScreen.dart';
-// import 'package:font_awesome_flutter/name_icon_mapping.dart';
 
 class ScreenController extends StatefulWidget {
   const ScreenController({Key? key}) : super(key: key);
