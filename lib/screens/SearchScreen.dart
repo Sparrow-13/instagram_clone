@@ -4,7 +4,6 @@ import 'package:instagram_clone/screens/SpecificPost.dart';
 import 'package:instagram_clone/sources/VideoSource.dart';
 import 'package:instagram_clone/utils/VideoController.dart';
 
-
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
 
@@ -91,7 +90,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                     fit: BoxFit.cover))
                             : null,
                         child: isVideoIndex(index)
-                            ? VideoController(videosUrl[index % 6])
+                            ? VideoController(
+                                videosUrl[index % videosUrl.length])
                             : null,
                       ),
                     );

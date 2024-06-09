@@ -1,4 +1,4 @@
-List videosUrl = [
+List videosUrl = <String>[
   // 'https://joy.videvo.net/videvo_files/video/free/2014-12/large_watermarked/Metal_Wind_Chimes_at_Sunset_preview.mp4',
   // 'https://cdn.videvo.net/videvo_files/video/free/2022-10/large_watermarked/220923_04_Diwali_4k_022_preview.mp4',
   // 'https://media.istockphoto.com/id/1169082076/video/im-proud-of-my-business.mp4?s=mp4-640x640-is&k=20&c=-cbdeBuEKvykfQ7vjKQ1YlGH9ekB2HyPIO8xiXGbwfs=',

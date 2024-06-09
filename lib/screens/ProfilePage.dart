@@ -5,6 +5,7 @@ import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:instagram_clone/components/PersonSuggestionCard.dart';
 import 'package:instagram_clone/screens/SpecificPost.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -52,62 +53,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   var _flag = true;
 
-  Widget Suggestion_card() {
-    return Padding(
-      padding: const EdgeInsets.only(right: 10),
-      child: Container(
-        width: 150,
-        height: 200,
-        decoration: BoxDecoration(
-            // color: Colors.g ,
-            border: Border.all(width: 1, color: Colors.grey.shade800),
-            borderRadius: BorderRadius.circular(5.0)),
-        child: Column(
-          children: [
-            Align(
-              alignment: Alignment.topRight,
-              child: Icon(
-                Icons.close,
-                color: Colors.grey,
-              ),
-            ),
-            CircleAvatar(
-              radius: 45,
-              backgroundImage: NetworkImage(RandomProfileImage()),
-            ),
-            Text(
-              RandomName(),
-              style: GoogleFonts.roboto(
-                  color: Colors.white, fontWeight: FontWeight.bold),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            Text(
-              RandomProfileLine(),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: GoogleFonts.roboto(color: Colors.white, fontSize: 11),
-            ),
-            // SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () => setState(() => _flag = !_flag),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 0),
-                child: Text(
-                  "Follow",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor:
-                    _flag ? Colors.blue : Colors.grey, // This is what you need!
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
 
   showaccountmenu() {
     showModalBottomSheet<void>(
@@ -531,7 +476,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       child: Row(
                                           children: List.generate(
                                         10,
-                                        (index) => Suggestion_card(),
+                                        (index) => SuggestionPersonCard(),
                                       )))
                                 ],
                               ),

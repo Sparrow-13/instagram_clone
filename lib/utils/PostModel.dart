@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:instagram_clone/components/VerticalSpace.dart';
 import 'package:instagram_clone/utils/PostIcons.dart';
 import 'package:instagram_clone/utils/VideoController.dart';
 
@@ -41,7 +42,8 @@ class _PostModelState extends State<PostModel> {
                 ? SizedBox(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.width,
-                    child: VideoController(videosUrl[widget.urlSource % 6]))
+                    child: VideoController(
+                        videosUrl[widget.urlSource % videosUrl.length]))
                 : Image(
                     image: NetworkImage(
                         "https://picsum.photos/seed/${widget.urlSource}/400/400"),
@@ -55,9 +57,6 @@ class _PostModelState extends State<PostModel> {
             padding: EdgeInsets.symmetric(horizontal: 12),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              // SizedBox(
-              //   height: 5,
-              // ),
               Text(
                 "${Random().nextInt(10000)} likes",
                 style: GoogleFonts.roboto(
@@ -65,9 +64,6 @@ class _PostModelState extends State<PostModel> {
                     fontSize: 14,
                     fontWeight: FontWeight.bold),
               ),
-              // SizedBox(
-              //   height: 5,
-              // ),
               Text(
                 "SomeRandom_1829",
                 style: GoogleFonts.roboto(
@@ -75,30 +71,25 @@ class _PostModelState extends State<PostModel> {
                     fontSize: 14,
                     fontWeight: FontWeight.bold),
               ),
-                  Text(
-                    "Some Random Caption for beautiful picture",
-                    style: GoogleFonts.roboto(
-                        color: Colors.grey,
-                        fontSize: 14),
-                  ),
-
-              SizedBox(
+              Text(
+                "Some Random Caption for beautiful picture",
+                style: GoogleFonts.roboto(color: Colors.grey, fontSize: 14),
+              ),
+              VerticalSpace(
                 height: 5,
               ),
               Text(
                 "View all 244 comments ",
-                style: GoogleFonts.roboto(
-                    color: Color.fromARGB(255, 186, 186, 186), fontSize: 14),
+                style: GoogleFonts.roboto(color: Colors.grey, fontSize: 14),
               ),
-              SizedBox(
+              VerticalSpace(
                 height: 5,
               ),
               Text(
                 "5 hours ago",
-                style: GoogleFonts.roboto(
-                    color: Color.fromARGB(255, 186, 186, 186), fontSize: 12),
+                style: GoogleFonts.roboto(color: Colors.grey, fontSize: 12),
               ),
-              SizedBox(
+              VerticalSpace(
                 height: 10,
               ),
               Divider(
