@@ -73,7 +73,10 @@ class HomePageAppBar extends StatelessWidget {
           onTap: showPopupMenu,
           child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
             Text("Instagram",
-                style: TextStyle(fontFamily: 'insta_head', fontSize: 33)),
+                style: TextStyle(
+                    fontFamily: 'insta_head',
+                    fontSize: 33,
+                    color: Colors.white)),
             Icon(
               Icons.keyboard_arrow_down_rounded,
               size: 24,
@@ -88,16 +91,20 @@ class HomePageAppBar extends StatelessWidget {
       backgroundColor: Colors.black,
       actions: [
         IconButton(
-            onPressed: null,
+            tooltip: 'notifications',
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('Notifications : Not Implemented Yet')));
+            },
             icon: FaIcon(
-              Icons.add_box_outlined,
+              FeatherIcons.heart,
               color: Colors.white,
             )),
         IconButton(
             tooltip: 'chat',
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Instagram chat')));
+                  const SnackBar(content: Text('Chat : Not Implemented Yet')));
             },
             icon: FaIcon(
               FeatherIcons.send,
