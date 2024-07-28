@@ -21,7 +21,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   bool showFriendsSuggestions = true;
   Faker faker = Faker();
-  int images_length = 1 + Random().nextInt(99);
+  int noOfImages = 1 + Random().nextInt(99);
 
   String ProfileImage_url = "https://randomuser.me/api/portraits/";
 
@@ -50,11 +50,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
     return "Followed By ${faker.person.firstName()}";
   }
-
-  var _flag = true;
-
-
-  showaccountmenu() {
+  
+  showAccountMenu() {
     showModalBottomSheet<void>(
         // context and builder are
         // required properties in this widget
@@ -178,7 +175,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           backgroundColor: Colors.black,
           appBar: AppBar(
             title: GestureDetector(
-                onTap: showaccountmenu,
+                onTap: showAccountMenu,
                 child:
                     Row(mainAxisAlignment: MainAxisAlignment.start, children: [
                   FaIcon(
@@ -210,8 +207,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               IconButton(
                   onPressed: () {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content:
-                            Text('Create View : Not Implemented Yet😊')));
+                        content: Text('Create View : Not Implemented Yet😊')));
                   },
                   icon: FaIcon(
                     Icons.add_box_outlined,
@@ -282,7 +278,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 Column(
                                   children: [
                                     Text(
-                                      "$images_length",
+                                      "$noOfImages",
                                       style: GoogleFonts.roboto(
                                         color: Colors.white,
                                       ),
@@ -497,7 +493,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ],
                             ),
                             SizedBox(
-                              height: (images_length ~/ 3 * 126) + 126,
+                              height: (noOfImages ~/ 3 * 126) + 126,
                               child: TabBarView(children: [
                                 Padding(
                                   padding: EdgeInsets.only(top: 10),
@@ -506,7 +502,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       // padding: const EdgeInsets.all(20),
                                       shrinkWrap: true,
                                       physics: NeverScrollableScrollPhysics(),
-                                      itemCount: images_length,
+                                      itemCount: noOfImages,
                                       gridDelegate:
                                           SliverGridDelegateWithFixedCrossAxisCount(
                                         crossAxisCount: 3,
@@ -522,7 +518,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    ViewSpecifiPost(
+                                                    ViewSpecificPost(
                                                         index, false)),
                                           ),
                                           child: Image(
@@ -538,10 +534,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   child: GridView.builder(
                                       primary: false,
                                       // padding: const EdgeInsets.all(20),
-
                                       shrinkWrap: true,
                                       physics: NeverScrollableScrollPhysics(),
-                                      itemCount: images_length,
+                                      itemCount: noOfImages,
                                       gridDelegate:
                                           SliverGridDelegateWithFixedCrossAxisCount(
                                         crossAxisCount: 3,
@@ -557,7 +552,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    ViewSpecifiPost(
+                                                    ViewSpecificPost(
                                                         index, false)),
                                           ),
                                           child: Image(

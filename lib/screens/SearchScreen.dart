@@ -20,6 +20,14 @@ class _SearchScreenState extends State<SearchScreen> {
     return indices.contains(index);
   }
 
+  final textController = TextEditingController();
+
+  @override
+  void dispose() {
+    textController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     List<String> pictures = List.generate(
@@ -42,6 +50,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       color: Colors.grey[800],
                       borderRadius: BorderRadius.circular(15)),
                   child: TextField(
+                    controller: textController,
                     cursorColor: Colors.white,
                     decoration: InputDecoration(
                         prefixIcon: Icon(Icons.search,
@@ -49,6 +58,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         suffixIcon: Icon(Icons.clear,
                             color: Colors.white.withOpacity(0.5)),
                         hintText: "search",
+                        alignLabelWithHint: true,
                         hintStyle:
                             TextStyle(color: Colors.white.withOpacity(0.5)),
                         border: InputBorder.none),
@@ -80,7 +90,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                ViewSpecifiPost(index, isVideoIndex(index))),
+                                ViewSpecificPost(index, isVideoIndex(index))),
                       ),
                       child: Container(
                         decoration: !isVideoIndex(index)
