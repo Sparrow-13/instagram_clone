@@ -407,7 +407,7 @@ class _ViewProfileState extends State<ViewProfile> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    ViewSpecifiPost(
+                                                    ViewSpecificPost(
                                                         index, false)),
                                           ),
                                           child: Image(
@@ -442,7 +442,7 @@ class _ViewProfileState extends State<ViewProfile> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    ViewSpecifiPost(
+                                                    ViewSpecificPost(
                                                         index, false)),
                                           ),
                                           child: Image(

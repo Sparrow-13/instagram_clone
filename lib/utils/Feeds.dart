@@ -16,7 +16,7 @@ class _FeedsState extends State<Feeds> {
   Widget build(BuildContext context) {
     return Column(
       children: List.generate(storyList.length, (index) {
-        return PostModel(isVideoUrl: false, urlSource: index , );
+        return PostModel(isVideoUrl: false, urlSource: index );
       }),
     );
   }

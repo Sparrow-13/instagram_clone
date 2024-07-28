@@ -47,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
                 Image.asset(
                   "assets/Instagram_meta.png",
-                  width: 120,
+                  width: 110,
                 )
               ],
             ),

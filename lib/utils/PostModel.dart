@@ -43,14 +43,30 @@ class _PostModelState extends State<PostModel> {
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.width,
                     child: VideoController(
-                        videosUrl[widget.urlSource % videosUrl.length]))
+                        videosUrl[widget.urlSource % videosUrl.length]),
+                  )
                 : Image(
                     image: NetworkImage(
                         "https://picsum.photos/seed/${widget.urlSource}/400/400"),
                     width: MediaQuery.of(context).size.width,
                     fit: BoxFit.cover,
+                    loadingBuilder: (BuildContext context, Widget child,
+                        ImageChunkEvent? loadingProgress) {
+                      if (loadingProgress == null) {
+                        return child;
+                      } else {
+                        return Center(
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                                : null,
+                          ),
+                        );
+                      }
+                    },
                   ),
-          ),
+          )
         ]),
         PostIcons(key: globalKey),
         Padding(

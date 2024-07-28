@@ -3,20 +3,27 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/utils/PostModel.dart';
 
-class ViewSpecifiPost extends StatefulWidget {
+class ViewSpecificPost extends StatefulWidget {
   final int urlIndex;
   final bool isVideoIndex;
-  const ViewSpecifiPost(this.urlIndex, this.isVideoIndex);
+
+  const ViewSpecificPost(this.urlIndex, this.isVideoIndex);
 
   @override
-  State<ViewSpecifiPost> createState() => _ViewSpecifiPostState();
+  State<ViewSpecificPost> createState() => _ViewSpecificPostState();
 }
 
-class _ViewSpecifiPostState extends State<ViewSpecifiPost> {
+class _ViewSpecificPostState extends State<ViewSpecificPost> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("Post"), backgroundColor: Colors.black),
+        appBar: AppBar(
+            title: Text(
+              "Post",
+              style: TextStyle(color: Colors.white),
+            ),
+            iconTheme: IconThemeData(color: Colors.white),
+            backgroundColor: Colors.black),
         body: Container(
             color: Colors.black,
             child: PostModel(
