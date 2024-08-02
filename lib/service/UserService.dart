@@ -10,4 +10,13 @@ class UserService with ChangeNotifier {
         .then((value) => print("Account added successfully!"))
         .catchError((error) => print("Failed to add user: $error"));
   }
+
+  Future<void> getAllUser() {
+    CollectionReference users = FirebaseFirestore.instance.collection('user');
+    return users.get().then((QuerySnapshot snapshot) {
+      snapshot.docs.forEach((doc) {
+        print('${doc.id} => ${doc.data()}');
+      });
+    }).catchError((error) => print("Failed to fetch users: $error"));
+  }
 }
