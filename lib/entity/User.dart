@@ -1,30 +1,28 @@
-import 'package:instagram_clone/entity/Post.dart';
-// User.dart
-
 class User {
   String id;
   String userName;
   String email;
   String fullName;
   String bio;
-  List<User> followers;
-  List<User> following;
-  List<User> request;
   String password;
-  List<Post> savedPost;
+  String imageUrl;
+  List<String> followers;
+  List<String> following;
+  List<String> request;
+  List<String> savedPost;
 
-  User({
-    required this.id,
-    required this.userName,
-    required this.email,
-    required this.fullName,
-    required this.bio,
-    required this.followers,
-    required this.following,
-    required this.request,
-    required this.password,
-    required this.savedPost,
-  });
+  User(
+      {required this.id,
+      required this.userName,
+      required this.email,
+      required this.fullName,
+      required this.bio,
+      required this.followers,
+      required this.following,
+      required this.request,
+      required this.password,
+      required this.savedPost,
+      required this.imageUrl});
 
   Map<String, dynamic> toMap() {
     return {
@@ -37,6 +35,7 @@ class User {
       'following': following,
       'request': request,
       'password': password,
+      'imageUrl': imageUrl,
       'savedPost': savedPost,
     };
   }
@@ -48,11 +47,12 @@ class User {
       email: map['email'] as String,
       fullName: map['fullName'] as String,
       bio: map['bio'] as String,
-      followers: List<User>.from(map['followers'].map((item) => User.fromMap(item))),
-      following: List<User>.from(map['following'].map((item) => User.fromMap(item))),
-      request: List<User>.from(map['request'].map((item) => User.fromMap(item))),
+      imageUrl: map['imageUrl'] as String,
+      followers: List<String>.from(map['followers']),
+      following: List<String>.from(map['following']),
+      request: List<String>.from(map['request']),
       password: map['password'] as String,
-      savedPost: List<Post>.from(map['savedPost'].map((item) => Post.fromMap(item))),
+      savedPost: List<String>.from(map['savedPost']),
     );
   }
 }
