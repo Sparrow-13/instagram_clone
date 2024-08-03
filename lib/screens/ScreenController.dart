@@ -7,7 +7,9 @@ import 'package:instagram_clone/screens/SearchScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart'
     show FaIcon, FontAwesomeIcons;
+import 'package:provider/provider.dart';
 
+import '../context/GlobalContext.dart';
 import 'NotificationScreen.dart';
 
 class ScreenController extends StatefulWidget {
@@ -25,12 +27,16 @@ class _ScreenControllerState extends State<ScreenController> {
     SearchScreen(),
     NotificationScreen(),
     ReelsScreen(),
-    ProfileScreen('Adnan qureshi',
-        'https://media-exp2.licdn.com/dms/image/C5603AQFTnjnEKc7Brg/profile-displayphoto-shrink_200_200/0/1613404214956?e=2147483647&v=beta&t=-ZO4y4Wzu-b6w7VP6ecezJfgddg5mhUr5O5dSH2eLbU')
+    ProfileScreen()
   ];
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<GlobalContext>(context);
+    final user = userProvider.user;
+    if (user == null) {
+      return Text("Login first");
+    }
     return Scaffold(
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: currentIndex,
@@ -71,8 +77,7 @@ class _ScreenControllerState extends State<ScreenController> {
             BottomNavigationBarItem(
               icon: CircleAvatar(
                 radius: 15,
-                backgroundImage: NetworkImage(
-                    "https://media-exp2.licdn.com/dms/image/C5603AQFTnjnEKc7Brg/profile-displayphoto-shrink_200_200/0/1613404214956?e=2147483647&v=beta&t=-ZO4y4Wzu-b6w7VP6ecezJfgddg5mhUr5O5dSH2eLbU"),
+                backgroundImage: NetworkImage(user!.imageUrl),
                 backgroundColor: Colors.black,
               ),
               label: 'profile',
