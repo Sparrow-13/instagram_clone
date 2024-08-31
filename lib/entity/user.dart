@@ -42,17 +42,18 @@ class User {
 
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
-      id: map['id'] as String,
-      userName: map['userName'] as String,
-      email: map['email'] as String,
-      fullName: map['fullName'] as String,
-      bio: map['bio'] as String,
-      imageUrl: map['imageUrl'] as String,
-      followers: List<String>.from(map['followers']),
-      following: List<String>.from(map['following']),
-      request: List<String>.from(map['request']),
-      password: map['password'] as String,
-      savedPost: List<String>.from(map['savedPost']),
+      id: map['id'] as String? ?? '',
+      userName: map['userName'] as String? ?? '',
+      email: map['email'] as String? ?? '',
+      fullName: map['fullName'] as String? ?? '',
+      bio: map['bio'] as String? ?? '',
+      imageUrl: map['imageUrl'] as String? ?? '',
+      followers: List<String>.from(map['followers'] ?? []),
+      following: List<String>.from(map['following'] ?? []),
+      request: List<String>.from(map['request'] ?? []),
+      password: map['password'] as String? ?? '',
+      savedPost: List<String>.from(map['savedPost'] ?? []),
     );
   }
+
 }

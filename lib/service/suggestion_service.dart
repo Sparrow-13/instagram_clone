@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 
-import '../components/PersonSuggestionCard.dart';
+import '../components/person_suggestion_card.dart';
 
 class SuggestionCardService extends StatefulWidget {
   const SuggestionCardService({super.key});

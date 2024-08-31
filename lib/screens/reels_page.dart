@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:instagram_clone/sources/VideoSource.dart';
-import 'package:instagram_clone/utils/VideoController.dart';
+import 'package:instagram_clone/sources/video_source.dart';
+import 'package:instagram_clone/utils/video_controller.dart';
 
 class ReelsScreen extends StatefulWidget {
-  const ReelsScreen({Key? key}) : super(key: key);
+  const ReelsScreen({super.key});
 
   @override
   State<ReelsScreen> createState() => _ReelsWidgetState();

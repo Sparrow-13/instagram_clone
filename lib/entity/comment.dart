@@ -1,4 +1,4 @@
-import 'Like.dart';
+import 'like.dart';
 
 class Comment {
   String id;
@@ -8,7 +8,6 @@ class Comment {
   List<Comment> replies;
   List<Like> likes;
 
-//<editor-fold desc="Data Methods">
   Comment({
     required this.id,
     required this.type,

@@ -1,7 +1,7 @@
 // ignore_for_file: use_key_in_widget_constructors
 
 import 'package:flutter/material.dart';
-import 'package:instagram_clone/utils/PostModel.dart';
+import 'package:instagram_clone/utils/post_model.dart';
 
 class ViewSpecificPost extends StatefulWidget {
   final int urlIndex;

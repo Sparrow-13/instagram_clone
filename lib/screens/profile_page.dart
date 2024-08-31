@@ -1,19 +1,19 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, sort_child_properties_last, dead_code, non_constant_identifier_names, use_key_in_widget_constructors, must_be_immutable
 
 import 'dart:math';
-import 'package:faker/faker.dart';
+import 'package:faker/faker.dart' as faker;
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:instagram_clone/components/PersonSuggestionCard.dart';
-import 'package:instagram_clone/context/GlobalContext.dart';
-import 'package:instagram_clone/screens/SpecificPost.dart';
-import 'package:instagram_clone/service/SuggestionService.dart';
+import 'package:instagram_clone/context/global_context.dart';
+import 'package:instagram_clone/screens/specific_post.dart';
+import 'package:instagram_clone/service/suggestion_service.dart';
 import 'package:provider/provider.dart';
 
-import '../entity/User.dart';
+import '../entity/user.dart';
 
 class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
+
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
@@ -25,7 +25,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   bool showFriendsSuggestions = true;
-  Faker faker = Faker();
+  var fakeGenerator = faker.Faker();
   int noOfImages = 1 + Random().nextInt(99);
 
   String profileImageUrl = "https://randomuser.me/api/portraits/";
@@ -42,13 +42,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   String randomName() {
-    return "${faker.person.firstName()} ${faker.person.lastName()}";
+    return "${fakeGenerator.person.firstName()} ${fakeGenerator.person.lastName()}";
   }
 
   String randomProfileLine() {
     return Random().nextInt(2) % 2 == 0
         ? "New to Instagram"
-        : "Followed By ${faker.person.firstName()}";
+        : "Followed By ${fakeGenerator.person.firstName()}";
   }
 
   showAccountMenu(User user) {
@@ -240,7 +240,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 gradient: LinearGradient(
-                                  colors: [
+                                  colors: const [
                                     Color.fromARGB(255, 255, 0, 225),
                                     Color.fromARGB(255, 255, 48, 48),
                                     Color.fromARGB(255, 255, 217, 67)
@@ -434,7 +434,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   SizedBox(height: 10),
                   TabBar(
                     indicatorColor: Colors.white,
-                    tabs: [
+                    tabs: const [
                       Tab(
                         icon: Icon(Icons.grid_on_outlined, color: Colors.white),
                       ),
