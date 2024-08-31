@@ -2,12 +2,12 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 import 'dart:math';
 
-import 'package:faker/faker.dart';
+import 'package:faker/faker.dart' as faker;
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:instagram_clone/screens/ViewProfile.dart';
-import 'package:instagram_clone/utils/BottamModal.dart';
+import 'package:instagram_clone/screens/view_profile.dart';
+import 'package:instagram_clone/utils/bottom_modal.dart';
 
 class NameSection extends StatefulWidget {
   @override
@@ -27,7 +27,7 @@ class NameSection extends StatefulWidget {
 
   late String profile_name = RandomName();
   RandomName() {
-    return "${faker.person.firstName()} ${faker.person.lastName()}";
+    return "${faker.Faker().person.firstName()} ${faker.Faker().person.lastName()}";
   }
 }
 
@@ -35,8 +35,6 @@ class _NameSectionState extends State<NameSection> {
   more_menu() {
     setState(() {
       showModalBottomSheet<void>(
-          // context and builder are
-          // required properties in this widget
           backgroundColor: Color.fromARGB(255, 38, 38, 38),
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
@@ -69,10 +67,9 @@ class _NameSectionState extends State<NameSection> {
                               shape: BoxShape.circle,
                               gradient: LinearGradient(
                                 colors: [
-                                  // Color(0xffcc306C),
-                                  Color.fromARGB(255, 255, 0, 225),
-                                  Color.fromARGB(255, 255, 48, 48),
-                                  Color.fromARGB(255, 255, 217, 67)
+                                  Color(0xFFFF00E1),  // Magenta
+                                  Color(0xFFFF3030),  // Red
+                                  Color(0xFFFFD943)
                                 ],
                                 begin: Alignment.topRight,
                                 end: Alignment.bottomLeft,

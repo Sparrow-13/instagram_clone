@@ -1,12 +1,12 @@
-// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
-// ignore_for_file: prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:instagram_clone/utils/PostModel.dart';
-import 'package:instagram_clone/sources/StoriesSource.dart';
+import 'package:instagram_clone/utils/post_model.dart';
+import 'package:instagram_clone/sources/stories_source.dart';
 
 
 class Feeds extends StatefulWidget {
+  const Feeds({super.key});
+
   @override
   State<Feeds> createState() => _FeedsState();
 }

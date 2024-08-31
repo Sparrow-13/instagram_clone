@@ -4,14 +4,16 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:instagram_clone/context/GlobalContext.dart';
-import 'package:instagram_clone/screens/ScreenController.dart';
-import 'package:instagram_clone/service/UserService.dart';
+import 'package:instagram_clone/context/cache_service.dart';
+import 'package:instagram_clone/context/global_context.dart';
+import 'package:instagram_clone/entity/user.dart';
+import 'package:instagram_clone/screens/screen_controller.dart';
+import 'package:instagram_clone/screens/prelogin/login.dart';
 import 'package:provider/provider.dart';
 
-import '../entity/User.dart';
+
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -28,14 +30,21 @@ class _SplashScreenState extends State<SplashScreen> {
     // Wait for 2 seconds
     await Future.delayed(Duration(seconds: 2));
 
-    // Fetch user data
-    final user = await UserService.fetchAndUseUser();
+    // Await the result of getUserFromCache()
+    var user = await CacheService().getUserFromCache(); // Await the future here
 
-    // Update the user in the provider
-    if (mounted) {
-      Provider.of<GlobalContext>(context, listen: false).setUser(user!);
+    if (user == null) {
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Login(),
+          ),
+        );
+      }
+    } else if (mounted) {
+      Provider.of<GlobalContext>(context, listen: false).setUser(user);
 
-      // Navigate to ScreenController after the current frame
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
           Navigator.pushReplacement(
@@ -48,6 +57,7 @@ class _SplashScreenState extends State<SplashScreen> {
       });
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

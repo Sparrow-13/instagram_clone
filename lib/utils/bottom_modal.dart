@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'dart:math' as math;
 
 class BottomModalMenu extends StatefulWidget {
-  const BottomModalMenu({Key? key}) : super(key: key);
+  const BottomModalMenu({super.key});
 
   @override
   State<BottomModalMenu> createState() => _BottomModalMenuState();

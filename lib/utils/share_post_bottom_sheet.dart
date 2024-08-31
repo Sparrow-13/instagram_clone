@@ -2,11 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:instagram_clone/utils/Person.dart';
-import 'package:instagram_clone/sources/StoriesSource.dart';
+import 'package:instagram_clone/utils/person.dart';
+import 'package:instagram_clone/sources/stories_source.dart';
 
 class SharePostBottomSheet extends StatefulWidget {
-  const SharePostBottomSheet({Key? key}) : super(key: key);
+  const SharePostBottomSheet({super.key});
 
   @override
   State<SharePostBottomSheet> createState() => _SharePostBottomSheetState();

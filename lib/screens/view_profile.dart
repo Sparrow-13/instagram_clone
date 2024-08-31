@@ -4,14 +4,14 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:instagram_clone/screens/SpecificPost.dart';
-import 'package:instagram_clone/service/SuggestionService.dart';
+import 'package:instagram_clone/screens/specific_post.dart';
+import 'package:instagram_clone/service/suggestion_service.dart';
 
 class ViewProfile extends StatefulWidget {
   String profileName;
-  String imageurl;
+  String imageURL;
 
-  ViewProfile(this.profileName, this.imageurl);
+  ViewProfile(this.profileName, this.imageURL);
 
   @override
   State<ViewProfile> createState() => _ViewProfileState();
@@ -101,7 +101,7 @@ class _ViewProfileState extends State<ViewProfile> {
                                                         width: 4),
                                                     image: DecorationImage(
                                                         image: NetworkImage(
-                                                            widget.imageurl),
+                                                            widget.imageURL),
                                                         fit: BoxFit.cover)),
                                               ),
                                             )),

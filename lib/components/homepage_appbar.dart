@@ -1,11 +1,11 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+
 
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class HomePageAppBar extends StatelessWidget {
-  const HomePageAppBar({Key? key}) : super(key: key);
+  const HomePageAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class HomePageAppBar extends StatelessWidget {
             value: 'following',
             height: 40,
             child: Row(
-              children: [
+              children: const [
                 SizedBox(
                   width: 10,
                 ),
@@ -34,10 +34,7 @@ class HomePageAppBar extends StatelessWidget {
                 Icon(
                   Icons.people_outline,
                   size: 20,
-                ),
-                // SizedBox(
-                //   width: 10,
-                // )
+                )
               ],
             ),
           ),
@@ -45,7 +42,7 @@ class HomePageAppBar extends StatelessWidget {
               height: 40,
               padding: EdgeInsets.zero,
               value: 'favourite',
-              child: Row(children: [
+              child: Row(children: const [
                 SizedBox(
                   width: 10,
                 ),
@@ -58,10 +55,7 @@ class HomePageAppBar extends StatelessWidget {
                 Icon(
                   Icons.star_border,
                   size: 20,
-                ),
-                // SizedBox(
-                //   width: 10,
-                // )
+                )
               ])),
         ],
         elevation: 1.0,
@@ -71,7 +65,7 @@ class HomePageAppBar extends StatelessWidget {
     return AppBar(
       title: GestureDetector(
           onTap: showPopupMenu,
-          child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+          child: Row(mainAxisAlignment: MainAxisAlignment.start, children: const [
             Text("Instagram",
                 style: TextStyle(
                     fontFamily: 'insta_head',
@@ -83,11 +77,6 @@ class HomePageAppBar extends StatelessWidget {
               color: Colors.white,
             )
           ])),
-      // leading: Padding(
-      //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      //   child: Placeholder(color: Colors.white,),
-      // ),
-      // leadingWidth: 400,
       backgroundColor: Colors.black,
       actions: [
         IconButton(

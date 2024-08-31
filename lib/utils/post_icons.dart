@@ -2,11 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:instagram_clone/utils/SharePostBottomSheet.dart';
+import 'package:instagram_clone/utils/share_post_bottom_sheet.dart';
 import 'dart:math' as math;
 
 class PostIcons extends StatefulWidget {
-  const PostIcons({Key? key}) : super(key: key);
+  const PostIcons({super.key});
   @override
   State<PostIcons> createState() => PostIconsState();
 }

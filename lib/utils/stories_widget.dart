@@ -3,10 +3,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:instagram_clone/sources/StoriesSource.dart';
+import 'package:instagram_clone/sources/stories_source.dart';
 
 class Stories extends StatelessWidget {
-  const Stories({Key? key}) : super(key: key);
+  const Stories({super.key});
 
   @override
   Widget build(BuildContext context) {

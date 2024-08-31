@@ -1,19 +1,20 @@
 // ignore_for_file: prefer_const_constructors
 // ignore_for_file: prefer_const_literals_to_create_immutables
-import 'package:instagram_clone/screens/Homepage.dart';
-import 'package:instagram_clone/screens/ProfilePage.dart';
-import 'package:instagram_clone/screens/ReelsPage.dart';
-import 'package:instagram_clone/screens/SearchScreen.dart';
+import 'package:instagram_clone/screens/homepage.dart';
+import 'package:instagram_clone/screens/prelogin/login.dart';
+import 'package:instagram_clone/screens/profile_page.dart';
+import 'package:instagram_clone/screens/reels_page.dart';
+import 'package:instagram_clone/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart'
     show FaIcon, FontAwesomeIcons;
 import 'package:provider/provider.dart';
 
-import '../context/GlobalContext.dart';
-import 'NotificationScreen.dart';
+import '../context/global_context.dart';
+import 'notification_screen.dart';
 
 class ScreenController extends StatefulWidget {
-  const ScreenController({Key? key}) : super(key: key);
+  const ScreenController({super.key});
 
   @override
   State<ScreenController> createState() => _ScreenControllerState();
@@ -35,7 +36,7 @@ class _ScreenControllerState extends State<ScreenController> {
     final userProvider = Provider.of<GlobalContext>(context);
     final user = userProvider.user;
     if (user == null) {
-      return Text("Login first");
+      return Login();
     }
     return Scaffold(
         bottomNavigationBar: BottomNavigationBar(
@@ -77,7 +78,7 @@ class _ScreenControllerState extends State<ScreenController> {
             BottomNavigationBarItem(
               icon: CircleAvatar(
                 radius: 15,
-                backgroundImage: NetworkImage(user!.imageUrl),
+                backgroundImage: NetworkImage(user.imageUrl),
                 backgroundColor: Colors.black,
               ),
               label: 'profile',

@@ -3,12 +3,12 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:instagram_clone/components/VerticalSpace.dart';
-import 'package:instagram_clone/utils/PostIcons.dart';
-import 'package:instagram_clone/utils/VideoController.dart';
+import 'package:instagram_clone/components/vertical_space.dart';
+import 'package:instagram_clone/utils/post_icons.dart';
+import 'package:instagram_clone/utils/video_controller.dart';
 
-import '../sources/VideoSource.dart';
-import 'NameSection.dart';
+import '../sources/video_source.dart';
+import 'name_section.dart';
 
 class PostModel extends StatefulWidget {
   final profileName;

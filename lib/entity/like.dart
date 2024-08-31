@@ -1,3 +1,4 @@
+
 import 'dart:ffi';
 
 class Like {
@@ -43,7 +44,7 @@ class Like {
       id: id ?? this.id,
       type: type ?? this.type,
       typeId: typeId ?? this.typeId,
-      userId: userId ?? this.userId,
+      userId: userId,
     );
   }
 
