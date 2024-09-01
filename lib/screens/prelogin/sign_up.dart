@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:instagram_clone/entity/user.dart';
 import 'package:instagram_clone/screens/prelogin/login.dart';
+import 'package:instagram_clone/service/auth_service.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/horizontal_space.dart';
@@ -33,18 +33,6 @@ class _SignUpState extends State<SignUp> {
     super.dispose();
   }
 
-  void _showSnackBar() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          "To be implemented",
-          style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor: Colors.black,
-      ),
-    );
-  }
-
   navigateToLogin() {
     Navigator.pushReplacement(
       context,
@@ -73,6 +61,7 @@ class _SignUpState extends State<SignUp> {
 
       // Update the global context with the new user
       updateContext(user);
+      AuthService().signInUser(user);
 
       // Navigate to the main screen if signup is successful
       if (context.mounted) {
@@ -92,7 +81,6 @@ class _SignUpState extends State<SignUp> {
       }
     }
   }
-
 
   final RegExp _emailRegExp = RegExp(
     r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
