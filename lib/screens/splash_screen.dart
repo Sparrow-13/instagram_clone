@@ -6,11 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:instagram_clone/context/cache_service.dart';
 import 'package:instagram_clone/context/global_context.dart';
-import 'package:instagram_clone/entity/user.dart';
-import 'package:instagram_clone/screens/screen_controller.dart';
 import 'package:instagram_clone/screens/prelogin/login.dart';
+import 'package:instagram_clone/screens/screen_controller.dart';
 import 'package:provider/provider.dart';
-
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -57,7 +55,6 @@ class _SplashScreenState extends State<SplashScreen> {
       });
     }
   }
-
 
   @override
   Widget build(BuildContext context) {

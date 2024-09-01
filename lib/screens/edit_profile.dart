@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:instagram_clone/components/vertical_space.dart';
 import 'package:instagram_clone/context/global_context.dart';
-import 'package:instagram_clone/screens/profile_page.dart';
+import 'package:instagram_clone/service/image_service.dart';
 import 'package:instagram_clone/service/user_service.dart';
 import 'package:provider/provider.dart';
 
@@ -20,6 +23,18 @@ class _EditProfileState extends State<EditProfile> {
   final fullNameController = TextEditingController();
   final bioController = TextEditingController();
   late final User user;
+  File? _image;
+  final picker = ImagePicker();
+
+  Future<void> _pickImage() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    }
+  }
 
   @override
   void didChangeDependencies() {
@@ -51,7 +66,8 @@ class _EditProfileState extends State<EditProfile> {
       Navigator.pop(context, 'Profile updated successfully!');
     } else {
       var isUserNameAvailable =
-          (await UserService().getUserByUsername(userNameController.text) == null);
+          (await UserService().getUserByUsername(userNameController.text) ==
+              null);
       if (isUserNameAvailable) {
         user.bio = bioController.text;
         user.fullName = fullNameController.text;
@@ -100,13 +116,15 @@ class _EditProfileState extends State<EditProfile> {
                   children: [
                     CircleAvatar(
                       radius: screenWidth / 8,
-                      backgroundImage: NetworkImage(user.imageUrl),
+                      backgroundImage: (_image == null)
+                          ? NetworkImage(user.imageUrl) as ImageProvider
+                          : FileImage(_image!),
                     ),
                     VerticalSpace(
                       height: 10,
                     ),
                     InkWell(
-                      onTap: () {},
+                      onTap: _pickImage,
                       child: Text(
                         "Change Profile Picture",
                         style: TextStyle(color: Colors.blue),
@@ -195,6 +213,8 @@ class _EditProfileState extends State<EditProfile> {
                     onTap: () {
                       if (_formKey.currentState!.validate()) {
                         upsertInformation();
+                        ImageService()
+                            .uploadImageToFirebase(context, _image, user);
                       }
                     },
                     child: Container(

@@ -3,6 +3,7 @@ import 'package:instagram_clone/components/horizontal_space.dart';
 import 'package:instagram_clone/context/cache_service.dart';
 import 'package:instagram_clone/screens/prelogin/sign_up.dart';
 import 'package:instagram_clone/screens/screen_controller.dart';
+import 'package:instagram_clone/service/auth_service.dart';
 import 'package:instagram_clone/service/login_service.dart';
 import 'package:provider/provider.dart';
 
@@ -19,7 +20,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final userNameController = TextEditingController();
   final passwordController = TextEditingController();
-  late bool passwordVisibility = false;
+  bool passwordVisibility = false;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -29,20 +30,19 @@ class _LoginState extends State<Login> {
     super.dispose();
   }
 
-  void _showSnackBar() {
+  void _showSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          "To be implemented",
-          style: TextStyle(color: Colors.white),
+          message,
+          style: const TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.black,
       ),
     );
   }
 
-  void checkLogin() async {
-    // Await the result from checkLogin()
+  Future<void> checkLogin() async {
     var user = await LoginService().checkLogin(
       userNameController.text,
       passwordController.text,
@@ -58,18 +58,16 @@ class _LoginState extends State<Login> {
         ),
       );
     } else {
-      // Handle login failure (e.g., show a snack bar or error message)
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Login failed. Please check your credentials.')),
-      );
+      _showSnackBar('Login failed. Please check your credentials.');
     }
   }
 
-  updateContext(user) {
+  void updateContext(user) {
     Provider.of<GlobalContext>(context, listen: false).setUser(user);
+    AuthService().signInUser(user); // Ensuring sign-in with Firebase/Auth service
   }
 
-  navigateToSignUp() {
+  void navigateToSignUp() {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
@@ -81,6 +79,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: Stack(
@@ -103,7 +102,7 @@ class _LoginState extends State<Login> {
                     ),
                     TextFormField(
                       controller: userNameController,
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.grey[800],
@@ -125,7 +124,7 @@ class _LoginState extends State<Login> {
                     VerticalSpace(height: 10),
                     TextFormField(
                       controller: passwordController,
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                       obscureText: !passwordVisibility,
                       decoration: InputDecoration(
                         filled: true,
@@ -164,8 +163,8 @@ class _LoginState extends State<Login> {
                     Align(
                       alignment: Alignment.centerRight,
                       child: InkWell(
-                        onTap: _showSnackBar,
-                        child: Text(
+                        onTap: () => _showSnackBar("To be implemented"),
+                        child: const Text(
                           "Forget password?",
                           style: TextStyle(color: Colors.blue),
                         ),
@@ -186,7 +185,7 @@ class _LoginState extends State<Login> {
                         ),
                         width: screenWidth,
                         height: 40,
-                        child: Center(
+                        child: const Center(
                           child: Text(
                             "Log In",
                             style: TextStyle(fontSize: 18, color: Colors.white),
@@ -207,14 +206,14 @@ class _LoginState extends State<Login> {
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     "Don't have an account?",
                     style: TextStyle(color: Colors.white),
                   ),
                   HorizontalSpace(width: 5),
                   InkWell(
                     onTap: navigateToSignUp,
-                    child: Text(
+                    child: const Text(
                       "Sign Up.",
                       style: TextStyle(color: Colors.blue),
                     ),
