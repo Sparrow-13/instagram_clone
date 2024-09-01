@@ -6,7 +6,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:instagram_clone/context/global_context.dart';
 import 'package:instagram_clone/screens/edit_profile.dart';
+import 'package:instagram_clone/screens/prelogin/login.dart';
 import 'package:instagram_clone/screens/specific_post.dart';
+import 'package:instagram_clone/service/logout_service.dart';
 import 'package:instagram_clone/service/suggestion_service.dart';
 import 'package:provider/provider.dart';
 
@@ -212,7 +214,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   color: Colors.white,
                 )),
             IconButton(
-                onPressed: null,
+                onPressed: () {
+                  navigateToLoginScreen(context);
+                },
                 icon: FaIcon(
                   FontAwesomeIcons.bars,
                   color: Colors.white,
@@ -535,6 +539,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => EditProfile()),
+    );
+  }
+
+  void navigateToLoginScreen(BuildContext context) {
+    LogoutService().logout();
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => Login()),
+      (Route<dynamic> route) => false,
     );
   }
 }

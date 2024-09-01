@@ -28,4 +28,10 @@ class CacheService {
 
     return null;
   }
+
+  Future<void> emptyCache() async {
+    var box = await Hive.openBox('userBox');
+    box.clear();
+    logStatement("Cache cleared"); // Confirm data saved
+  }
 }

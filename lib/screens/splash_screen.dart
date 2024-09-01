@@ -44,14 +44,12 @@ class _SplashScreenState extends State<SplashScreen> {
       Provider.of<GlobalContext>(context, listen: false).setUser(user);
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ScreenController(),
-            ),
-          );
-        }
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ScreenController(),
+          ),
+        );
       });
     }
   }

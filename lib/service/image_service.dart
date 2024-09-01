@@ -21,7 +21,8 @@ class ImageService {
 
     // Get a reference to Firebase Storage with the specified bucket
     FirebaseStorage storage = FirebaseStorage.instanceFor();
-    Reference ref = storage.ref().child('profile_images/${user.userName}/$fileName');
+    Reference ref =
+        storage.ref().child('profile_images/${user.userName}/$fileName');
 
     try {
       // Upload the file to Firebase Storage

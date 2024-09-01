@@ -11,4 +11,9 @@ class GlobalContext with ChangeNotifier {
     _user = newUser;
     notifyListeners();
   }
+
+  void removeUser() {
+    _user = null;
+    notifyListeners();
+  }
 }

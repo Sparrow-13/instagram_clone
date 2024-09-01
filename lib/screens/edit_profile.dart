@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instagram_clone/components/vertical_space.dart';
+import 'package:instagram_clone/context/cache_service.dart';
 import 'package:instagram_clone/context/global_context.dart';
 import 'package:instagram_clone/service/image_service.dart';
 import 'package:instagram_clone/service/user_service.dart';
@@ -63,6 +64,7 @@ class _EditProfileState extends State<EditProfile> {
       user.fullName = fullNameController.text;
       UserService().updateUserByEmail(user);
       Provider.of<GlobalContext>(context, listen: false).setUser(user);
+      CacheService().saveUserToCache(user);
       Navigator.pop(context, 'Profile updated successfully!');
     } else {
       var isUserNameAvailable =
@@ -74,6 +76,7 @@ class _EditProfileState extends State<EditProfile> {
         user.userName = userNameController.text;
         UserService().updateUserByEmail(user);
         Provider.of<GlobalContext>(context, listen: false).setUser(user);
+        CacheService().saveUserToCache(user);
         Navigator.pop(context, 'Profile updated successfully!');
       } else {
         _showSnackBar();
