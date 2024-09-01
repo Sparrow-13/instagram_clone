@@ -1,10 +1,11 @@
-
 import 'dart:math';
+
 import 'package:faker/faker.dart' as faker;
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:instagram_clone/context/global_context.dart';
+import 'package:instagram_clone/screens/edit_profile.dart';
 import 'package:instagram_clone/screens/specific_post.dart';
 import 'package:instagram_clone/service/suggestion_service.dart';
 import 'package:provider/provider.dart';
@@ -346,6 +347,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       Expanded(
                         child: InkWell(
+                          onTap: navigateToEditProfile,
                           child: Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(6),
@@ -356,7 +358,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 child: Text(
                                   "Edit ",
                                   style:
-                                  GoogleFonts.roboto(color: Colors.white),
+                                      GoogleFonts.roboto(color: Colors.white),
                                 ),
                               ),
                             ),
@@ -376,7 +378,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 child: Text(
                                   "Share Profile",
                                   style:
-                                  GoogleFonts.roboto(color: Colors.white),
+                                      GoogleFonts.roboto(color: Colors.white),
                                 ),
                               ),
                             ),
@@ -394,11 +396,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             padding: const EdgeInsets.all(4),
                             child: Center(
                                 child: Icon(
-                                  showFriendsSuggestions
-                                      ? Icons.person_add
-                                      : Icons.person_add_outlined,
-                                  color: Colors.white,
-                                )),
+                              showFriendsSuggestions
+                                  ? Icons.person_add
+                                  : Icons.person_add_outlined,
+                              color: Colors.white,
+                            )),
                           ),
                         ),
                       ),
@@ -425,9 +427,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         SizedBox(height: 10),
                         SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: SuggestionCardService()
-                        )
+                            scrollDirection: Axis.horizontal,
+                            child: SuggestionCardService())
                       ],
                     ),
                   ),
@@ -455,7 +456,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             physics: NeverScrollableScrollPhysics(),
                             itemCount: noOfImages,
                             gridDelegate:
-                            SliverGridDelegateWithFixedCrossAxisCount(
+                                SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 3,
                               crossAxisSpacing: 4.0,
                               mainAxisSpacing: 4.0,
@@ -463,14 +464,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                             itemBuilder: (BuildContext context, index) {
                               return InkWell(
-                                onTap: () =>
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            ViewSpecificPost(index, false),
-                                      ),
-                                    ),
+                                onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        ViewSpecificPost(index, false),
+                                  ),
+                                ),
                                 child: Image(
                                   image: NetworkImage(
                                       "https://picsum.photos/seed/$index/400/600"),
@@ -488,7 +488,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             physics: NeverScrollableScrollPhysics(),
                             itemCount: noOfImages,
                             gridDelegate:
-                            SliverGridDelegateWithFixedCrossAxisCount(
+                                SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 3,
                               crossAxisSpacing: 4.0,
                               mainAxisSpacing: 4.0,
@@ -496,14 +496,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                             itemBuilder: (BuildContext context, index) {
                               return InkWell(
-                                onTap: () =>
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            ViewSpecificPost(index, false),
-                                      ),
-                                    ),
+                                onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        ViewSpecificPost(index, false),
+                                  ),
+                                ),
                                 child: Image(
                                   image: NetworkImage(
                                       "https://picsum.photos/seed/$index/400/600"),
@@ -530,5 +529,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       return "0";
     }
     return entity.length.toString();
+  }
+
+  navigateToEditProfile() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => EditProfile()),
+    );
   }
 }

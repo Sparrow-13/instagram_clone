@@ -118,4 +118,24 @@ class UserService with ChangeNotifier {
       return null; // Handle errors gracefully
     }
   }
+  Future<void> updateUserByEmail(User user) async {
+    CollectionReference users = FirebaseFirestore.instance.collection('user');
+
+    // Query for documents where 'email' matches the user's email
+    QuerySnapshot querySnapshot = await users.where('email', isEqualTo: user.email).get();
+
+    // Check if any documents match the query
+    if (querySnapshot.docs.isNotEmpty) {
+      // Loop through all matching documents and update them
+      for (QueryDocumentSnapshot doc in querySnapshot.docs) {
+        await doc.reference
+            .set(user.toMap(), SetOptions(merge: true)) // Merge updated fields with existing data
+            .then((value) => logStatement("Account updated successfully for user with email ${user.email}!"))
+            .catchError((error) => logStatement("Failed to update user: $error"));
+      }
+    } else {
+      logStatement("No user found with email ${user.email}.");
+    }
+  }
+
 }
