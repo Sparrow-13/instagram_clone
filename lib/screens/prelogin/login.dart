@@ -64,7 +64,7 @@ class _LoginState extends State<Login> {
 
   void updateContext(user) {
     Provider.of<GlobalContext>(context, listen: false).setUser(user);
-    AuthService().signInUser(user); // Ensuring sign-in with Firebase/Auth service
+    AuthService().signInUser(user);
   }
 
   void navigateToSignUp() {
