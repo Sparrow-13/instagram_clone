@@ -23,7 +23,7 @@ class LoginService {
       return null;
     } else {
       logStatement("new User");
-      var user = new User(
+      var user = User(
           id: "",
           userName: username,
           email: email,
