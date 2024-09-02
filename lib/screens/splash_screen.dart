@@ -8,6 +8,7 @@ import 'package:instagram_clone/context/cache_service.dart';
 import 'package:instagram_clone/context/global_context.dart';
 import 'package:instagram_clone/screens/prelogin/login.dart';
 import 'package:instagram_clone/screens/screen_controller.dart';
+import 'package:instagram_clone/service/auth_service.dart';
 import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -42,6 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
       }
     } else if (mounted) {
       Provider.of<GlobalContext>(context, listen: false).setUser(user);
+      AuthService().signInUser(user);
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.pushReplacement(

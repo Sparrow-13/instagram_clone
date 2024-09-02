@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/context/cache_service.dart';
 import 'package:instagram_clone/service/user_service.dart';
 import 'package:instagram_clone/utils/log_utility.dart';
 import 'package:path/path.dart' as path;
@@ -13,10 +14,9 @@ import '../entity/user.dart';
 class ImageService {
   final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
 
-  Future<void> uploadImageToFirebase(
-      BuildContext context, File? image, User user) async {
+  Future<void> uploadImageToFirebase(BuildContext context, File? image, User user) async {
     if (image == null) return;
-    // Create a unique file name based on current time
+
     String fileName = DateTime.now().millisecondsSinceEpoch.toString();
 
     // Get a reference to Firebase Storage with the specified bucket
@@ -44,7 +44,7 @@ class ImageService {
       logStatement('Download URL: $downloadURL');
       user.imageUrl = downloadURL;
       UserService().updateUserByEmail(user);
-
+      CacheService().saveUserToCache(user);
       Provider.of<GlobalContext>(context, listen: false).setUser(user);
 
       // Display a success message or use the URL as needed
@@ -75,24 +75,24 @@ class ImageService {
 
         // Monitor the progress of the upload
         uploadTask.snapshotEvents.listen((TaskSnapshot snapshot) {
-          print('Task state: ${snapshot.state}');
-          print(
+          logStatement('Task state: ${snapshot.state}');
+          logStatement(
               'Progress: ${(snapshot.bytesTransferred / snapshot.totalBytes) * 100} %');
         });
 
         await uploadTask;
-        print('File uploaded successfully');
+        logStatement('File uploaded successfully');
       } on FirebaseException catch (e) {
         if (e.code == 'unauthorized') {
-          print('User does not have permission to upload to this location.');
+          logStatement('User does not have permission to upload to this location.');
         } else {
-          print('Firebase Storage Error: ${e.message}');
+          logStatement('Firebase Storage Error: ${e.message}');
         }
       } catch (e) {
-        print('Error uploading file: $e');
+        logStatement('Error uploading file: $e');
       }
     } else {
-      print('Error: No authenticated user found.');
+      logStatement('Error: No authenticated user found.');
     }
   }
 }
