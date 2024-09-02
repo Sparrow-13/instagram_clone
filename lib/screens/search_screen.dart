@@ -52,15 +52,24 @@ class _SearchScreenState extends State<SearchScreen> {
                   child: TextField(
                     controller: textController,
                     cursorColor: Colors.white,
+                    style: TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                         prefixIcon: Icon(Icons.search,
                             color: Colors.white.withOpacity(0.5)),
-                        suffixIcon: Icon(Icons.clear,
-                            color: Colors.white.withOpacity(0.5)),
+                        suffixIcon: IconButton(
+                          icon: Icon(Icons.clear,
+                              color: Colors.white.withOpacity(0.5)),
+                          color: Colors.white.withOpacity(0.5),
+                          onPressed: () {
+                            textController.text = "";
+                          },
+                        ),
                         hintText: "search",
-                        alignLabelWithHint: true,
                         hintStyle:
                             TextStyle(color: Colors.white.withOpacity(0.5)),
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        labelStyle: TextStyle(color: Colors.white),
                         border: InputBorder.none),
                   )),
             ),
