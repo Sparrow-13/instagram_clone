@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:instagram_clone/context/global_context.dart';
 import 'package:instagram_clone/screens/edit_profile.dart';
+import 'package:instagram_clone/screens/people_tabview.dart';
 import 'package:instagram_clone/screens/prelogin/login.dart';
 import 'package:instagram_clone/screens/specific_post.dart';
 import 'package:instagram_clone/service/logout_service.dart';
@@ -292,39 +293,59 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           )
                         ],
                       ),
-                      Column(
-                        children: [
-                          Text(
-                            user.followers.length.toString(),
-                            style: GoogleFonts.roboto(
-                              color: Colors.white,
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PeopleTabView(user: user , tabIndex: 0,),
                             ),
-                          ),
-                          SizedBox(height: 5),
-                          Text(
-                            "Followers",
-                            style: GoogleFonts.roboto(
-                              color: Colors.white,
+                          );
+                        },
+                        child: Column(
+                          children: [
+                            Text(
+                              user.followers.length.toString(),
+                              style: GoogleFonts.roboto(
+                                color: Colors.white,
+                              ),
                             ),
-                          )
-                        ],
+                            SizedBox(height: 5),
+                            Text(
+                              "Followers",
+                              style: GoogleFonts.roboto(
+                                color: Colors.white,
+                              ),
+                            )
+                          ],
+                        ),
                       ),
-                      Column(
-                        children: [
-                          Text(
-                            user.following.length.toString(),
-                            style: GoogleFonts.roboto(
-                              color: Colors.white,
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PeopleTabView(user: user , tabIndex: 1,),
                             ),
-                          ),
-                          SizedBox(height: 5),
-                          Text(
-                            "Following",
-                            style: GoogleFonts.roboto(
-                              color: Colors.white,
+                          );
+                        },
+                        child: Column(
+                          children: [
+                            Text(
+                              user.following.length.toString(),
+                              style: GoogleFonts.roboto(
+                                color: Colors.white,
+                              ),
                             ),
-                          )
-                        ],
+                            SizedBox(height: 5),
+                            Text(
+                              "Following",
+                              style: GoogleFonts.roboto(
+                                color: Colors.white,
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ],
                   ),

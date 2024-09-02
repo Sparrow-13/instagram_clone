@@ -3,13 +3,17 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:instagram_clone/components/vertical_space.dart';
+import 'package:instagram_clone/context/global_context.dart';
 import 'package:instagram_clone/sources/stories_source.dart';
+import 'package:provider/provider.dart';
 
 class Stories extends StatelessWidget {
   const Stories({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var user = Provider.of<GlobalContext>(context, listen: false).user;
     return SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
@@ -48,14 +52,13 @@ class Stories extends StatelessWidget {
                                       border: Border.all(
                                           color: Colors.black, width: 4),
                                       image: DecorationImage(
-                                          image: NetworkImage(
-                                              "https://media-exp2.licdn.com/dms/image/C5603AQFTnjnEKc7Brg/profile-displayphoto-shrink_200_200/0/1613404214956?e=2147483647&v=beta&t=-ZO4y4Wzu-b6w7VP6ecezJfgddg5mhUr5O5dSH2eLbU"),
+                                          image: NetworkImage(user!.imageUrl),
                                           fit: BoxFit.cover)),
                                 ),
                               )),
                         ],
                       )),
-                  SizedBox(
+                  VerticalSpace(
                     height: 5,
                   ),
                   SizedBox(

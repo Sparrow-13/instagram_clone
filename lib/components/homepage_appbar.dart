@@ -13,6 +13,7 @@ class HomePageAppBar extends StatelessWidget {
       return showMenu<String>(
         context: context,
         position: RelativeRect.fromLTRB(0.0, 90.0, 0.0, 0.0),
+        color: Color.fromARGB(210, 0, 0, 0),
         //,    //position where you want to show the menu on screen
         items: [
           PopupMenuItem<String>(
@@ -26,13 +27,16 @@ class HomePageAppBar extends StatelessWidget {
                 ),
                 Text(
                   'Following',
-                  style: TextStyle(),
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
                 ),
                 SizedBox(
                   width: 10,
                 ),
                 Icon(
                   Icons.people_outline,
+                  color: Colors.white,
                   size: 20,
                 )
               ],
@@ -48,12 +52,16 @@ class HomePageAppBar extends StatelessWidget {
                 ),
                 Text(
                   'Favourite',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
                 ),
                 SizedBox(
                   width: 10,
                 ),
                 Icon(
                   Icons.star_border,
+                  color: Colors.white,
                   size: 20,
                 )
               ])),
