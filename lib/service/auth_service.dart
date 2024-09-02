@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:instagram_clone/utils/log_utility.dart';
 
 import '../entity/user.dart'
     as user; // Adjusted import to avoid naming conflict
@@ -14,31 +15,31 @@ class AuthService {
         password: user.password,
       );
       if (userCredential.user != null) {
-        print('User signed in successfully: ${userCredential.user?.email}');
+        logStatement('User signed in successfully: ${userCredential.user?.email}');
       } else {
-        print('Sign-in failed. User credential is null.');
+        logStatement('Sign-in failed. User credential is null.');
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        print('No user found for that email.');
+        logStatement('No user found for that email.');
       } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
+        logStatement('Wrong password provided for that user.');
       } else if (e.code == 'invalid-email') {
-        print('Invalid email format.');
+        logStatement('Invalid email format.');
       } else {
-        print('Firebase Auth Error: ${e.message}');
+        logStatement('Firebase Auth Error: ${e.message}');
       }
     } catch (e) {
-      print('General Error signing in user: $e');
+      logStatement('General Error signing in user: $e');
     }
   }
 
   Future<void> logoutUser() async {
     try {
       await _firebaseAuth.signOut();
-      print('User logged out successfully.');
+      logStatement('User logged out successfully.');
     } catch (e) {
-      print('Error logging out: $e');
+      logStatement('Error logging out: $e');
     }
   }
 }
