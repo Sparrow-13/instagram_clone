@@ -6,18 +6,21 @@ import 'package:faker/faker.dart' as faker;
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:instagram_clone/entity/user.dart';
 import 'package:instagram_clone/screens/view_profile.dart';
 import 'package:instagram_clone/utils/bottom_modal.dart';
 
 class NameSection extends StatefulWidget {
   @override
   State<NameSection> createState() => _NameSectionState();
-  NameSection();
+  final User user;
+
+  NameSection({super.key, required this.user});
 
   String ProfileImage_url = "https://randomuser.me/api/portraits/";
   late String imageURL = RandomProfileImage();
-  RandomProfileImage() {
 
+  RandomProfileImage() {
     int rand = Random().nextInt(50);
     if (rand % 2 == 0) {
       return "$ProfileImage_url/women/$rand.jpg";
@@ -26,13 +29,14 @@ class NameSection extends StatefulWidget {
   }
 
   late String profile_name = RandomName();
+
   RandomName() {
     return "${faker.Faker().person.firstName()} ${faker.Faker().person.lastName()}";
   }
 }
 
 class _NameSectionState extends State<NameSection> {
-  more_menu() {
+  more_menu(BuildContext context) {
     setState(() {
       showModalBottomSheet<void>(
           backgroundColor: Color.fromARGB(255, 38, 38, 38),
@@ -42,7 +46,6 @@ class _NameSectionState extends State<NameSection> {
           ),
           context: context,
           builder: (BuildContext context) {
-
             return BottomModalMenu();
           });
     });
@@ -51,7 +54,7 @@ class _NameSectionState extends State<NameSection> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical:5),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -67,8 +70,8 @@ class _NameSectionState extends State<NameSection> {
                               shape: BoxShape.circle,
                               gradient: LinearGradient(
                                 colors: [
-                                  Color(0xFFFF00E1),  // Magenta
-                                  Color(0xFFFF3030),  // Red
+                                  Color(0xFFFF00E1), // Magenta
+                                  Color(0xFFFF3030), // Red
                                   Color(0xFFFFD943)
                                 ],
                                 begin: Alignment.topRight,
@@ -86,7 +89,7 @@ class _NameSectionState extends State<NameSection> {
                                       Border.all(color: Colors.black, width: 3),
                                   image: DecorationImage(
                                       image: NetworkImage(
-                                        widget.imageURL,
+                                        widget.user.imageUrl,
                                       ),
                                       fit: BoxFit.cover)),
                             ),
@@ -104,11 +107,11 @@ class _NameSectionState extends State<NameSection> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => ViewProfile(
-                                  widget.profile_name, widget.imageURL)),
+                              builder: (context) =>
+                                  ViewProfile(user: widget.user)),
                         );
                       },
-                      child: Text(widget.profile_name,
+                      child: Text(widget.user.userName,
                           style: GoogleFonts.roboto(
                               color: Colors.white,
                               fontSize: 13,
@@ -126,7 +129,7 @@ class _NameSectionState extends State<NameSection> {
             ],
           ),
           IconButton(
-              onPressed: more_menu,
+              onPressed: () => more_menu(context),
               icon: Icon(
                 Icons.more_vert_outlined,
                 color: Colors.white,

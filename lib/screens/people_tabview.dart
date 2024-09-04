@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/screens/followers.dart';
+import 'package:instagram_clone/screens/followings.dart';
 
 import '../entity/user.dart';
 
@@ -60,9 +61,8 @@ class _PeopleTabViewState extends State<PeopleTabView> {
                   )),
               Padding(
                 padding: EdgeInsets.only(top: 10),
-                child: Container(
-                  color: Colors.blue,
-                  height: 400,
+                child: Following(
+                  user: widget.user,
                 ),
               ),
               Padding(

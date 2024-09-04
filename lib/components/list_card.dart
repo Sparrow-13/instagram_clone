@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/components/horizontal_space.dart';
 
 class ListCard extends StatelessWidget {
   final String imageUrl;
@@ -20,23 +21,19 @@ class ListCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      elevation: 4,
+      color: Colors.black,
       margin: const EdgeInsets.all(10),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(
           children: [
-            // Image Section
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.network(
-                imageUrl,
-                width: 80,
-                height: 80,
-                fit: BoxFit.cover,
-              ),
+            CircleAvatar(
+              radius: 35,
+              backgroundImage: NetworkImage(imageUrl),
             ),
-            const SizedBox(width: 10),
+            HorizontalSpace(
+              width: 15,
+            ),
             // Text Section
             Expanded(
               child: Column(
@@ -46,11 +43,10 @@ class ListCard extends StatelessWidget {
                   Text(
                     title,
                     style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
                   ),
-                  const SizedBox(height: 5),
                   Text(
                     subtitle,
                     style: const TextStyle(
@@ -64,9 +60,24 @@ class ListCard extends StatelessWidget {
             // Button Section
             TextButton(
               onPressed: onButtonPressed,
-              child: const Text('Button'),
+              style: ButtonStyle(
+                backgroundColor: WidgetStateProperty.resolveWith<Color>(
+                  (Set<WidgetState> states) {
+                    if (states.contains(WidgetState.pressed)) {
+                      return Colors.grey.shade700; // Darker grey when pressed
+                    }
+                    return Colors.grey.shade800; // Default grey color
+                  },
+                ),
+                shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14.0),
+                  ),
+                ),
+                foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
+              ),
+              child: const Text('Message'),
             ),
-            // Kebab Menu Section
             IconButton(
               icon: const Icon(Icons.more_vert),
               onPressed: onMenuSelected,
