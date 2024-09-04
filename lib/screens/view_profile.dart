@@ -1,17 +1,17 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, non_constant_identifier_names, must_be_immutable, file_names , use_key_in_widget_constructors
-
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:instagram_clone/screens/people_tabview.dart';
 import 'package:instagram_clone/screens/specific_post.dart';
 import 'package:instagram_clone/service/suggestion_service.dart';
 
-class ViewProfile extends StatefulWidget {
-  String profileName;
-  String imageURL;
+import '../entity/user.dart';
 
-  ViewProfile(this.profileName, this.imageURL);
+class ViewProfile extends StatefulWidget {
+  final User user;
+
+  const ViewProfile({super.key, required this.user});
 
   @override
   State<ViewProfile> createState() => _ViewProfileState();
@@ -19,7 +19,7 @@ class ViewProfile extends StatefulWidget {
 
 class _ViewProfileState extends State<ViewProfile> {
   bool showFriendsSuggestions = true;
-  int images_length = 1 + Random().nextInt(99);
+  int imagesLength = 1 + Random().nextInt(99);
 
   toggleShowFriends() {
     setState(() {
@@ -35,16 +35,17 @@ class _ViewProfileState extends State<ViewProfile> {
       child: Scaffold(
           backgroundColor: Colors.black,
           appBar: AppBar(
+            iconTheme: const IconThemeData(color: Colors.white),
             titleSpacing: 0,
             title: Text(
-              widget.profileName,
+              widget.user.userName,
               style: GoogleFonts.roboto(
                   color: Colors.white,
                   fontSize: 18,
                   fontWeight: FontWeight.bold),
             ),
             backgroundColor: Colors.black,
-            actions: [
+            actions: const [
               IconButton(
                   onPressed: null,
                   icon: Icon(
@@ -75,8 +76,7 @@ class _ViewProfileState extends State<ViewProfile> {
                                             decoration: BoxDecoration(
                                               shape: BoxShape.circle,
                                               gradient: LinearGradient(
-                                                colors: [
-                                                  // Color(0xffcc306C),
+                                                colors: const [
                                                   Color.fromARGB(
                                                       255, 255, 0, 225),
                                                   Color.fromARGB(
@@ -101,7 +101,8 @@ class _ViewProfileState extends State<ViewProfile> {
                                                         width: 4),
                                                     image: DecorationImage(
                                                         image: NetworkImage(
-                                                            widget.imageURL),
+                                                            widget
+                                                                .user.imageUrl),
                                                         fit: BoxFit.cover)),
                                               ),
                                             )),
@@ -110,7 +111,7 @@ class _ViewProfileState extends State<ViewProfile> {
                                 Column(
                                   children: [
                                     Text(
-                                      "$images_length",
+                                      "$imagesLength",
                                       style: GoogleFonts.roboto(
                                         color: Colors.white,
                                       ),
@@ -126,43 +127,69 @@ class _ViewProfileState extends State<ViewProfile> {
                                     )
                                   ],
                                 ),
-                                Column(
-                                  children: [
-                                    Text(
-                                      "179K",
-                                      style: GoogleFonts.roboto(
-                                        color: Colors.white,
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => PeopleTabView(
+                                          user: widget.user,
+                                          tabIndex: 0,
+                                        ),
                                       ),
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                      "Followers",
-                                      style: GoogleFonts.roboto(
-                                        color: Colors.white,
+                                    );
+                                  },
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        widget.user.followers.length.toString(),
+                                        style: GoogleFonts.roboto(
+                                          color: Colors.white,
+                                        ),
                                       ),
-                                    )
-                                  ],
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        "Followers",
+                                        style: GoogleFonts.roboto(
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
-                                Column(
-                                  children: [
-                                    Text(
-                                      "194",
-                                      style: GoogleFonts.roboto(
-                                        color: Colors.white,
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => PeopleTabView(
+                                          user: widget.user,
+                                          tabIndex: 1,
+                                        ),
                                       ),
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                      "Following",
-                                      style: GoogleFonts.roboto(
-                                        color: Colors.white,
+                                    );
+                                  },
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        widget.user.following.length.toString(),
+                                        style: GoogleFonts.roboto(
+                                          color: Colors.white,
+                                        ),
                                       ),
-                                    )
-                                  ],
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        "Following",
+                                        style: GoogleFonts.roboto(
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
@@ -174,7 +201,7 @@ class _ViewProfileState extends State<ViewProfile> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  widget.profileName,
+                                  widget.user.fullName,
                                   style: GoogleFonts.roboto(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold),
@@ -183,25 +210,7 @@ class _ViewProfileState extends State<ViewProfile> {
                                   height: 4,
                                 ),
                                 Text(
-                                  "Shitty Bio",
-                                  style: GoogleFonts.roboto(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 4,
-                                ),
-                                Text(
-                                  "Nothing new here",
-                                  style: GoogleFonts.roboto(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 4,
-                                ),
-                                Text(
-                                  "Go and Study hard",
+                                  widget.user.bio,
                                   style: GoogleFonts.roboto(
                                     color: Colors.white,
                                   ),
@@ -290,7 +299,9 @@ class _ViewProfileState extends State<ViewProfile> {
                             ),
                             TabBar(
                               indicatorColor: Colors.white,
-                              tabs: [
+                              dividerColor: Colors.white24,
+                              labelColor: Colors.white,
+                              tabs: const [
                                 Tab(
                                   icon: Icon(Icons.grid_on_outlined),
                                 ),
@@ -298,7 +309,7 @@ class _ViewProfileState extends State<ViewProfile> {
                               ],
                             ),
                             SizedBox(
-                              height: (images_length ~/ 3 * 126) + 126,
+                              height: (imagesLength ~/ 3 * 126) + 126,
                               child: TabBarView(children: [
                                 Padding(
                                   padding: EdgeInsets.only(top: 10),
@@ -308,7 +319,7 @@ class _ViewProfileState extends State<ViewProfile> {
 
                                       shrinkWrap: true,
                                       physics: NeverScrollableScrollPhysics(),
-                                      itemCount: images_length,
+                                      itemCount: imagesLength,
                                       gridDelegate:
                                           SliverGridDelegateWithFixedCrossAxisCount(
                                         crossAxisCount: 3,
@@ -343,7 +354,7 @@ class _ViewProfileState extends State<ViewProfile> {
 
                                       shrinkWrap: true,
                                       physics: NeverScrollableScrollPhysics(),
-                                      itemCount: images_length,
+                                      itemCount: imagesLength,
                                       gridDelegate:
                                           SliverGridDelegateWithFixedCrossAxisCount(
                                         crossAxisCount: 3,

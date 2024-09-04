@@ -11,13 +11,13 @@ import '../sources/video_source.dart';
 import 'name_section.dart';
 
 class PostModel extends StatefulWidget {
-  final profileName;
+  final user;
   final bool isVideoUrl;
   final int urlSource;
   final videoUrl;
 
   const PostModel(
-      {this.profileName,
+      {required this.user,
       required this.isVideoUrl,
       required this.urlSource,
       this.videoUrl});
@@ -34,7 +34,9 @@ class _PostModelState extends State<PostModel> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        NameSection(),
+        NameSection(
+          user: widget.user,
+        ),
         Stack(children: [
           InkWell(
             onDoubleTap: () => globalKey.currentState?.toggleLike(),
