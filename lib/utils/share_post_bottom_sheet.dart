@@ -1,8 +1,6 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:instagram_clone/utils/person.dart';
+import 'package:instagram_clone/utils/person_generator.dart';
 import 'package:instagram_clone/sources/stories_source.dart';
 
 class SharePostBottomSheet extends StatefulWidget {
@@ -67,7 +65,7 @@ class _SharePostBottomSheetState extends State<SharePostBottomSheet> {
                         children: [
                           CircleAvatar(
                             radius: 30,
-                            backgroundImage: NetworkImage(PersonGenerator().imgurl),
+                            backgroundImage: NetworkImage(PersonGenerator().imgURL),
                           ),
                           SizedBox(
                             width: 10,
@@ -75,13 +73,13 @@ class _SharePostBottomSheetState extends State<SharePostBottomSheet> {
                           Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(PersonGenerator().profile_name.trim(),
+                              Text(PersonGenerator().profileName.trim(),
                                   style: GoogleFonts.roboto(
                                       fontSize: 15,
                                       color:
                                           Color.fromARGB(255, 202, 202, 202))),
                               Text(
-                                "@${PersonGenerator().profile_name.trim()}",
+                                "@${PersonGenerator().profileName.trim()}",
                                 style: GoogleFonts.roboto(
                                     fontSize: 15,
                                     color: Color.fromARGB(255, 126, 126, 126)),

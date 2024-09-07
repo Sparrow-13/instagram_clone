@@ -1,5 +1,3 @@
-// ignore_for_file: use_key_in_widget_constructors
-
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/context/global_context.dart';
 import 'package:instagram_clone/utils/post_model.dart';
@@ -11,7 +9,7 @@ class ViewSpecificPost extends StatefulWidget {
   final int urlIndex;
   final bool isVideoIndex;
 
-  const ViewSpecificPost(this.urlIndex, this.isVideoIndex);
+  const ViewSpecificPost(this.urlIndex, this.isVideoIndex, {super.key});
 
   @override
   State<ViewSpecificPost> createState() => _ViewSpecificPostState();
@@ -32,7 +30,7 @@ class _ViewSpecificPostState extends State<ViewSpecificPost> {
         body: Container(
             color: Colors.black,
             child: PostModel(
-              user: user,
+              user: user!,
               urlSource: widget.urlIndex,
               isVideoUrl: widget.isVideoIndex,
             )));

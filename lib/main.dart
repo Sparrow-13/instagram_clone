@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -11,10 +12,9 @@ import 'entity/user/user.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  final appDir =
-      await getApplicationDocumentsDirectory(); // Get app-specific storage directory
-  await Hive.initFlutter(
-      appDir.path); // Initialize Hive with the app-specific storage path
+  final appDir = await getApplicationDocumentsDirectory();
+  await Hive.initFlutter(appDir.path);
+  FirebaseAuth.instance.setLanguageCode('en');
 
   Hive.registerAdapter(UserAdapter());
   runApp(

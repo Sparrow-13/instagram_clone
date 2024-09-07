@@ -64,21 +64,31 @@ class _SignUpState extends State<SignUp> {
       AuthService().signInUser(user);
 
       // Navigate to the main screen if signup is successful
-      if (context.mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ScreenController(),
-          ),
-        );
-      }
+      _navigateToMainScreen();
     } else {
       // Handle signup failure (e.g., show a snack bar or error message)
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('SignUp failed. Try again.')),
-        );
-      }
+      _showSignUpFailureMessage();
+    }
+  }
+
+  /// Helper method to navigate to the main screen
+  void _navigateToMainScreen() {
+    if (mounted) { // Check if the widget is still mounted
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ScreenController(),
+        ),
+      );
+    }
+  }
+
+  /// Helper method to show a failure message
+  void _showSignUpFailureMessage() {
+    if (mounted) { // Check if the widget is still mounted
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('SignUp failed. Try again.')),
+      );
     }
   }
 

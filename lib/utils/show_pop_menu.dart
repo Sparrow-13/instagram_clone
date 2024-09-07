@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-
 import 'package:flutter/material.dart';
 
 class PopMenu {
@@ -14,7 +12,7 @@ class PopMenu {
           value: 'following',
           height: 40,
           child: Row(
-            children: [
+            children: const [
               SizedBox(
                 width: 10,
               ),
@@ -29,9 +27,6 @@ class PopMenu {
                 Icons.people_outline,
                 size: 20,
               ),
-              // SizedBox(
-              //   width: 10,
-              // )
             ],
           ),
         ),
@@ -39,7 +34,7 @@ class PopMenu {
             height: 40,
             padding: EdgeInsets.zero,
             value: 'favourite',
-            child: Row(children: [
+            child: Row(children: const [
               SizedBox(
                 width: 10,
               ),
@@ -52,10 +47,7 @@ class PopMenu {
               Icon(
                 Icons.star_border,
                 size: 20,
-              ),
-              // SizedBox(
-              //   width: 10,
-              // )
+              )
             ])),
       ],
       elevation: 1.0,

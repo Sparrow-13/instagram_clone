@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-// ignore_for_file: prefer_const_literals_to_create_immutables
 import 'package:instagram_clone/screens/homepage.dart';
 import 'package:instagram_clone/screens/prelogin/login.dart';
 import 'package:instagram_clone/screens/profile_page.dart';

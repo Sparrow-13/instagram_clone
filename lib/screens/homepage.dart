@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/components/homepage_appbar.dart';
 import 'package:instagram_clone/components/vertical_space.dart';

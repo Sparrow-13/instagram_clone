@@ -145,7 +145,7 @@ class UserService with ChangeNotifier {
   }
 
   Future<List<User>> getUsersFromUserIds(
-      String userName, List<String> userIds) async {
+      String userName, List<String> userIds , String boxName) async {
     List<User> users = [];
 
     // Open the Hive box
@@ -153,7 +153,6 @@ class UserService with ChangeNotifier {
         await Hive.openBox<List<dynamic>>(CacheService.followersBoxName);
 
     List<String> idsToFetchFromFirestore = [];
-    List<User> cachedUsers = [];
 
     // Retrieve cached data
     List<dynamic>? cachedFollowers = cacheBox.get(userName);
@@ -195,9 +194,9 @@ class UserService with ChangeNotifier {
           users.addAll(fetchedUsers);
 
           // Update cache with fetched users
-          await CacheService().addFollowersToCache(userName, users);
+          await CacheService().addAssociatedUsersToCache(userName, users , boxName);
         } catch (e) {
-          print("Error fetching users from Firestore: $e");
+          logStatement("Error fetching users from Firestore: $e");
         }
       }
     }

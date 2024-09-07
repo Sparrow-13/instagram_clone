@@ -21,8 +21,7 @@ class ImageService {
 
     // Get a reference to Firebase Storage with the specified bucket
     FirebaseStorage storage = FirebaseStorage.instanceFor();
-    Reference ref =
-        storage.ref().child('profile_images/${user.userName}/$fileName');
+    Reference ref = storage.ref().child('profile_images/${user.userName}/$fileName');
 
     try {
       // Upload the file to Firebase Storage
@@ -31,68 +30,74 @@ class ImageService {
       // Show a progress indicator
       uploadTask.snapshotEvents.listen((TaskSnapshot snapshot) {
         logStatement('Task state: ${snapshot.state}');
-        logStatement(
-            'Progress: ${(snapshot.bytesTransferred / snapshot.totalBytes) * 100} %');
+        logStatement('Progress: ${(snapshot.bytesTransferred / snapshot.totalBytes) * 100} %');
       });
 
       // Wait for the upload to complete
-      await uploadTask
-          .whenComplete(() => logStatement('File uploaded successfully'));
+      await uploadTask.whenComplete(() => logStatement('File uploaded successfully'));
 
       // Get the download URL
       String downloadURL = await ref.getDownloadURL();
       logStatement('Download URL: $downloadURL');
-      user.imageUrl = downloadURL;
-      UserService().updateUserByEmail(user);
-      CacheService().saveUserToCache(user);
-      Provider.of<GlobalContext>(context, listen: false).setUser(user);
 
-      // Display a success message or use the URL as needed
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Image uploaded successfully!')),
-      );
+      // Update user information with new image URL
+      user.imageUrl = downloadURL;
+      await UserService().updateUserByEmail(user);
+      await CacheService().saveUserToCache(user);
+
+      // Use a mounted check before using context
+      if (context.mounted) {
+        Provider.of<GlobalContext>(context, listen: false).setUser(user);
+
+        // Display a success message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Image uploaded successfully!')),
+        );
+      }
     } catch (e) {
       logStatement('Error uploading image: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to upload image. Please try again.')),
-      );
+
+      // Use a mounted check before using context
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to upload image. Please try again.')),
+        );
+      }
     }
   }
+
 
   Future<void> uploadFile(User firebaseUser, String filePath) async {
-    if (firebaseUser != null) {
-      try {
-        File file = File(filePath);
-        String fileName = path.basename(file.path); // Get the file name
+    try {
+      File file = File(filePath);
+      String fileName = path.basename(file.path); // Get the file name
 
-        // Create a reference to the file location in Firebase Storage
-        Reference storageRef = _firebaseStorage
-            .ref()
-            .child('uploads/${firebaseUser.email}/$fileName');
+      // Create a reference to the file location in Firebase Storage
+      Reference storageRef = _firebaseStorage
+          .ref()
+          .child('uploads/${firebaseUser.email}/$fileName');
 
-        // Upload the file
-        UploadTask uploadTask = storageRef.putFile(file);
+      // Upload the file
+      UploadTask uploadTask = storageRef.putFile(file);
 
-        // Monitor the progress of the upload
-        uploadTask.snapshotEvents.listen((TaskSnapshot snapshot) {
-          logStatement('Task state: ${snapshot.state}');
-          logStatement(
-              'Progress: ${(snapshot.bytesTransferred / snapshot.totalBytes) * 100} %');
-        });
+      // Monitor the progress of the upload
+      uploadTask.snapshotEvents.listen((TaskSnapshot snapshot) {
+        logStatement('Task state: ${snapshot.state}');
+        logStatement(
+            'Progress: ${(snapshot.bytesTransferred / snapshot.totalBytes) * 100} %');
+      });
 
-        await uploadTask;
-        logStatement('File uploaded successfully');
-      } on FirebaseException catch (e) {
-        if (e.code == 'unauthorized') {
-          logStatement('User does not have permission to upload to this location.');
-        } else {
-          logStatement('Firebase Storage Error: ${e.message}');
-        }
-      } catch (e) {
-        logStatement('Error uploading file: $e');
+      await uploadTask;
+      logStatement('File uploaded successfully');
+    } on FirebaseException catch (e) {
+      if (e.code == 'unauthorized') {
+        logStatement('User does not have permission to upload to this location.');
+      } else {
+        logStatement('Firebase Storage Error: ${e.message}');
       }
-    } else {
-      logStatement('Error: No authenticated user found.');
+    } catch (e) {
+      logStatement('Error uploading file: $e');
     }
   }
+
 }

@@ -17,7 +17,7 @@ class _FeedsState extends State<Feeds> {
     var user = Provider.of<GlobalContext>(context, listen: false).user;
     return Column(
       children: List.generate(storyList.length, (index) {
-        return PostModel(user: user, isVideoUrl: false, urlSource: index);
+        return PostModel(user: user!, isVideoUrl: false, urlSource: index);
       }),
     );
   }
