@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/components/list_card.dart';
+import 'package:instagram_clone/context/cache_service.dart';
 import 'package:instagram_clone/screens/view_profile.dart';
 import 'package:instagram_clone/utils/log_utility.dart';
 
-import '../entity/user.dart';
+import '../entity/user/user.dart';
 import '../service/user_service.dart';
 
 class Followers extends StatefulWidget {
@@ -18,39 +19,85 @@ class Followers extends StatefulWidget {
 class _FollowersState extends State<Followers> {
   final TextEditingController searchController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  List<User> _followers = []; // All followers data
-  List<User> _filteredFollowers = []; // Filtered followers data
+  final List<User> _followers = [];
+  List<User> _filteredFollowers = [];
   bool _isLoading = false;
   bool _hasMore = true;
-  int _page = 0; // Page counter for pagination
-  final int _pageSize = 20; // Number of items per page
-  String _lastQuery = ''; // Last search query
+  int _page = 0;
+  final int _pageSize = 20;
+  final _cacheService = CacheService();
+  bool _isCacheExhausted = false;
 
   @override
   void initState() {
     super.initState();
-    _fetchFollowers();
+    _initialize();
 
-    // Add listener to the scroll controller to implement infinite scrolling
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels >=
-          _scrollController.position.maxScrollExtent - 100 &&
+      if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 50 &&
           !_isLoading &&
           _hasMore) {
-        logStatement("Scrolled to the bottom.");
-        _fetchFollowers();
+        _fetchMoreFollowers();
       }
+    });
+
+    searchController.addListener(() {
+      _searchFollowers(searchController.text);
     });
   }
 
-  @override
-  void dispose() {
-    searchController.dispose();
-    _scrollController.dispose();
-    super.dispose();
+  Future<void> _initialize() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      await _cacheService.openFollowersBox(); // Ensure the Hive box is opened
+      await _fetchInitialFollowers(); // Fetch after box is opened
+    } catch (e) {
+      print("Error initializing followers: $e");
+      setState(() {
+        _isLoading = false;
+        _hasMore = false;
+      });
+    }
   }
 
-  Future<void> _fetchFollowers({String query = ''}) async {
+  Future<void> _fetchInitialFollowers() async {
+    setState(() {
+      _isLoading = true;
+      _page = 0; // Reset page when fetching initial data
+    });
+
+    try {
+      // Ensure the Hive box is opened before accessing it
+      await _cacheService.openFollowersBox();
+
+      // Fetch from cache first
+      List<User>? cachedFollowers = await _cacheService.getFollowersFromCache(widget.user.userName); // Await the result
+      if (cachedFollowers != null && cachedFollowers.isNotEmpty) {
+        setState(() {
+          _followers.addAll(cachedFollowers);
+          _filteredFollowers = List.from(_followers);
+          _isLoading = false;
+          _hasMore = cachedFollowers.length >= _pageSize;
+          _isCacheExhausted = cachedFollowers.length < widget.user.followers.length; // Check if cache covers all data
+        });
+        return; // Return if followers found in cache
+      }
+
+      // Fetch initial followers from Firestore if not found in cache
+      await _fetchFollowersFromDatabase(0); // Fetch first page
+    } catch (error) {
+      print("Error fetching initial followers: $error");
+      setState(() {
+        _isLoading = false;
+        _hasMore = false;
+      });
+    }
+  }
+
+  Future<void> _fetchMoreFollowers() async {
     if (_isLoading || !_hasMore) return;
 
     setState(() {
@@ -58,63 +105,83 @@ class _FollowersState extends State<Followers> {
     });
 
     try {
-      var startIndex = _page * _pageSize;
-      var endIndex = startIndex + _pageSize;
-
-      if (startIndex >= widget.user.followers.length) {
-        setState(() {
-          _hasMore = false;
-          _isLoading = false;
-        });
-        return;
+      if (!_isCacheExhausted) {
+        int startIndex = (_page + 1) * _pageSize;
+        if (startIndex < _followers.length) {
+          setState(() {
+            _filteredFollowers = _followers.sublist(0, startIndex + _pageSize);
+            _isLoading = false;
+            _page++;
+            _hasMore = _filteredFollowers.length < widget.user.followers.length;
+          });
+          return;
+        } else {
+          _isCacheExhausted = true;
+        }
       }
 
-      var userIdsSubset = widget.user.followers.sublist(
-        startIndex,
-        endIndex > widget.user.followers.length
-            ? widget.user.followers.length
-            : endIndex,
-      );
-
-      var followers = await UserService().getUsersFromIds(userIdsSubset);
-
-      setState(() {
-        if (query.isNotEmpty) {
-          // If searching, filter the results
-          _followers = followers.where((user) => user.userName.toLowerCase().contains(query.toLowerCase()) || user.fullName.toLowerCase().contains(query.toLowerCase())).toList();
-        } else {
-          _followers.addAll(followers); // Add new batch of followers to the list
-        }
-
-        _filteredFollowers = _followers; // Update filtered followers
-        _isLoading = false;
-        _page++;
-
-        if (followers.length < _pageSize) {
-          _hasMore = false;
-        }
-      });
+      await _fetchFollowersFromDatabase(_page + 1);
     } catch (error) {
+      print("Error fetching more followers: $error");
       setState(() {
         _isLoading = false;
         _hasMore = false;
       });
-      logStatement("Error fetching followers: $error");
     }
   }
 
-  void _searchFollowers(String query) {
-    if (query == _lastQuery) return; // If the search query is same as last time, skip to avoid redundant call
+  Future<void> _fetchFollowersFromDatabase(int page) async {
+    int startIndex = page * _pageSize;
+    int endIndex = startIndex + _pageSize;
 
-    _lastQuery = query; // Update last query
+    if (startIndex >= widget.user.followers.length) {
+      setState(() {
+        _hasMore = false;
+        _isLoading = false;
+      });
+      return;
+    }
+
+    List<String> userIdsSubset = widget.user.followers.sublist(
+      startIndex,
+      endIndex > widget.user.followers.length ? widget.user.followers.length : endIndex,
+    );
+
+    List<User> moreFollowers = await UserService().getUsersFromUserIds(widget.user.userName , userIdsSubset);
 
     setState(() {
-      _page = 0; // Reset page
-      _followers.clear(); // Clear the previous followers list to reset it
-      _filteredFollowers.clear(); // Clear filtered followers list to reset it
-      _hasMore = true; // Reset loading condition
-      _fetchFollowers(query: query); // Trigger search logic for the updated query
+      _followers.addAll(moreFollowers);
+      _filteredFollowers = List.from(_followers);
+      _isLoading = false;
+      _page++;
+
+      if (moreFollowers.length < _pageSize) {
+        _hasMore = false;
+      }
     });
+  }
+
+  void _searchFollowers(String query) {
+    if (query.isEmpty) {
+      setState(() {
+        _filteredFollowers = _followers;
+      });
+    } else {
+      setState(() {
+        _filteredFollowers = _followers
+            .where((user) =>
+        user.userName.toLowerCase().contains(query.toLowerCase()) ||
+            user.fullName.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -136,16 +203,13 @@ class _FollowersState extends State<Followers> {
               controller: searchController,
               cursorColor: Colors.white,
               style: const TextStyle(color: Colors.white),
-              onChanged: (query) {
-                _searchFollowers(query); // Call search logic on change
-              },
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.search, color: Colors.white.withOpacity(0.5)),
                 suffixIcon: IconButton(
                   icon: Icon(Icons.clear, color: Colors.white.withOpacity(0.5)),
                   onPressed: () {
                     searchController.clear();
-                    _searchFollowers(''); // Clear search results and reset list
+                    _searchFollowers('');
                   },
                 ),
                 hintText: "Search",
@@ -167,9 +231,6 @@ class _FollowersState extends State<Followers> {
                     child: CircularProgressIndicator(),
                   ),
                 );
-              }
-              if (index >= _filteredFollowers.length) {
-                return SizedBox.shrink(); // Return empty widget if beyond count
               }
               final follower = _filteredFollowers[index];
               return InkWell(

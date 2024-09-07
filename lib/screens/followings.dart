@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/components/list_card.dart';
 
-import '../entity/user.dart';
+import '../entity/user/user.dart';
 import '../service/user_service.dart';
 
 class Following extends StatefulWidget {

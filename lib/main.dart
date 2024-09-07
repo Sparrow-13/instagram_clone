@@ -3,12 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:instagram_clone/context/global_context.dart';
 import 'package:instagram_clone/screens/splash_screen.dart';
+import 'package:path_provider/path_provider.dart'; // Required for getting application directory
 import 'package:provider/provider.dart';
+
+import 'entity/user/user.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  await Hive.initFlutter();
+  final appDir =
+      await getApplicationDocumentsDirectory(); // Get app-specific storage directory
+  await Hive.initFlutter(
+      appDir.path); // Initialize Hive with the app-specific storage path
+
+  Hive.registerAdapter(UserAdapter());
   runApp(
     ChangeNotifierProvider(
       create: (context) => GlobalContext(),

@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faker/faker.dart';
 
-import '../entity/user.dart';
+import '../entity/user/user.dart';
 import '../service/user_service.dart';
 import '../utils/log_utility.dart';
 

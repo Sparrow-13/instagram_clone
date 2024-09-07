@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../entity/user.dart';
+import '../entity/user/user.dart';
 
 class GlobalContext with ChangeNotifier {
   User? _user;

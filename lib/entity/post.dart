@@ -1,6 +1,6 @@
 import 'comment.dart';
 import 'like.dart';
-import 'user.dart';
+import 'user/user.dart';
 
 class Post {
   String id;

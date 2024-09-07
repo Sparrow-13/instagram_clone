@@ -6,7 +6,7 @@ import 'package:faker/faker.dart' as faker;
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:instagram_clone/entity/user.dart';
+import 'package:instagram_clone/entity/user/user.dart';
 import 'package:instagram_clone/screens/view_profile.dart';
 import 'package:instagram_clone/utils/bottom_modal.dart';
 
