@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:instagram_clone/utils/log_utility.dart';
 
-import '../entity/user.dart'
+import '../entity/user/user.dart'
     as user; // Adjusted import to avoid naming conflict
 
 class AuthService {

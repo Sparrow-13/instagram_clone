@@ -1,7 +1,7 @@
 import 'package:instagram_clone/service/user_service.dart';
 import 'package:instagram_clone/utils/log_utility.dart';
 
-import '../entity/user.dart';
+import '../entity/user/user.dart';
 
 class LoginService {
   Future<User?>? checkLogin(String username, String password) async {

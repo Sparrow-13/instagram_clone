@@ -20,45 +20,47 @@ class ListCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       color: Colors.black,
-      margin: const EdgeInsets.all(10),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            CircleAvatar(
-              radius: 35,
-              backgroundImage: NetworkImage(imageUrl),
-            ),
-            HorizontalSpace(
-              width: 15,
-            ),
-            // Text Section
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-                  ),
-                  Text(
-                    subtitle,
-                    style: const TextStyle(
+      margin: const EdgeInsets.all(5),
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: 35,
+            backgroundImage: NetworkImage(imageUrl),
+          ),
+          HorizontalSpace(
+            width: 15,
+          ),
+          // Text Section
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
                       fontSize: 14,
-                      color: Colors.grey,
-                    ),
+                      overflow: TextOverflow.ellipsis,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+                Text(
+                  subtitle,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    overflow: TextOverflow.ellipsis,
+                    color: Colors.grey,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            // Button Section
-            TextButton(
+          ),
+          HorizontalSpace(width: 5,),
+          // Button Section
+          SizedBox(
+            width: 75,
+            child: TextButton(
               onPressed: onButtonPressed,
               style: ButtonStyle(
                 backgroundColor: WidgetStateProperty.resolveWith<Color>(
@@ -71,19 +73,22 @@ class ListCard extends StatelessWidget {
                 ),
                 shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14.0),
+                    borderRadius: BorderRadius.circular(12.0),
                   ),
                 ),
                 foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
               ),
-              child: const Text('Message'),
+              child: const Text(
+                'Message',
+                style: TextStyle(fontSize: 12),
+              ),
             ),
-            IconButton(
-              icon: const Icon(Icons.more_vert),
-              onPressed: onMenuSelected,
-            ),
-          ],
-        ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.more_vert),
+            onPressed: onMenuSelected,
+          ),
+        ],
       ),
     );
   }

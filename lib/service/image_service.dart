@@ -9,7 +9,7 @@ import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
 
 import '../context/global_context.dart';
-import '../entity/user.dart';
+import '../entity/user/user.dart';
 
 class ImageService {
   final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;

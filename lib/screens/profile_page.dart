@@ -13,7 +13,7 @@ import 'package:instagram_clone/service/logout_service.dart';
 import 'package:instagram_clone/service/suggestion_service.dart';
 import 'package:provider/provider.dart';
 
-import '../entity/user.dart';
+import '../entity/user/user.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});

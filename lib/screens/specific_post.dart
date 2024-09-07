@@ -5,7 +5,7 @@ import 'package:instagram_clone/context/global_context.dart';
 import 'package:instagram_clone/utils/post_model.dart';
 import 'package:provider/provider.dart';
 
-import '../entity/user.dart';
+import '../entity/user/user.dart';
 
 class ViewSpecificPost extends StatefulWidget {
   final int urlIndex;

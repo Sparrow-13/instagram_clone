@@ -3,19 +3,22 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram_clone/entity/user.dart';
+import 'package:hive/hive.dart';
+import 'package:instagram_clone/context/cache_service.dart';
+import 'package:instagram_clone/entity/user/user.dart';
 
 import '../utils/log_utility.dart';
 
 class UserService with ChangeNotifier {
+  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
   final CollectionReference usersCollection =
       FirebaseFirestore.instance.collection('user');
 
-  Future<void> addUser(User user) {
-    return usersCollection
-        .add(user.toMap())
-        .then((value) => logStatement("Account added successfully!"))
-        .catchError((error) => logStatement("Failed to add user: $error"));
+  Future<void> addUser(User user) async {
+    DocumentReference docRef = await usersCollection.add(user.toMap());
+    String docId = docRef.id;
+    user.id = docId;
+    await docRef.update({'id': docId});
   }
 
   Future<void> getAllUser() {
@@ -141,37 +144,64 @@ class UserService with ChangeNotifier {
     }
   }
 
-  Future<List<User>> fetchUsersByIds(List<String> userIds) async {
-    try {
-      List<List<String>> chunks = [];
-      const int chunkSize = 10;
-      for (var i = 0; i < userIds.length; i += chunkSize) {
-        chunks.add(userIds.sublist(
-          i,
-          i + chunkSize > userIds.length ? userIds.length : i + chunkSize,
-        ));
+  Future<List<User>> getUsersFromUserIds(
+      String userName, List<String> userIds) async {
+    List<User> users = [];
+
+    // Open the Hive box
+    var cacheBox =
+        await Hive.openBox<List<dynamic>>(CacheService.followersBoxName);
+
+    List<String> idsToFetchFromFirestore = [];
+    List<User> cachedUsers = [];
+
+    // Retrieve cached data
+    List<dynamic>? cachedFollowers = cacheBox.get(userName);
+
+    if (cachedFollowers != null) {
+      var cachedUserMap = {for (var user in cachedFollowers) user.id: user};
+
+      for (var id in userIds) {
+        if (cachedUserMap.containsKey(id)) {
+          users.add(cachedUserMap[id]!);
+        } else {
+          idsToFetchFromFirestore.add(id);
+        }
       }
-
-      List<User> users = [];
-
-      for (List<String> chunk in chunks) {
-        QuerySnapshot querySnapshot = await usersCollection
-            .where(FieldPath.documentId, whereIn: chunk)
-            .get();
-
-        // Convert the documents to User objects and add them to the list
-        users.addAll(querySnapshot.docs.map((doc) {
-          return User.fromMap({
-            'id': doc.id,
-            ...doc.data() as Map<String, dynamic>,
-          });
-        }).toList());
-      }
-
-      return users;
-    } catch (e) {
-      print('Failed to fetch users by IDs: $e');
-      return [];
+    } else {
+      idsToFetchFromFirestore.addAll(userIds);
     }
+
+    if (idsToFetchFromFirestore.isNotEmpty) {
+      for (int i = 0; i < idsToFetchFromFirestore.length; i += 10) {
+        var end = (i + 10 < idsToFetchFromFirestore.length)
+            ? i + 10
+            : idsToFetchFromFirestore.length;
+        var batchIds = idsToFetchFromFirestore.sublist(i, end);
+
+        try {
+          // Firestore query
+          var querySnapshot = await _fireStore
+              .collection('user')
+              .where(FieldPath.documentId, whereIn: batchIds)
+              .get();
+
+          var fetchedUsers = querySnapshot.docs.map((doc) {
+            // Create User object from DocumentSnapshot
+            var user = User.fromFireStore(doc);
+            return user;
+          }).toList();
+
+          users.addAll(fetchedUsers);
+
+          // Update cache with fetched users
+          await CacheService().addFollowersToCache(userName, users);
+        } catch (e) {
+          print("Error fetching users from Firestore: $e");
+        }
+      }
+    }
+
+    return users;
   }
 }
