@@ -1,8 +1,3 @@
-// ignore_for_file: prefer_const_constructors, non_constant_identifier_names, use_key_in_widget_constructors, must_be_immutable
-// ignore_for_file: prefer_const_literals_to_create_immutables
-import 'dart:math';
-
-import 'package:faker/faker.dart' as faker;
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,28 +10,11 @@ class NameSection extends StatefulWidget {
   State<NameSection> createState() => _NameSectionState();
   final User user;
 
-  NameSection({super.key, required this.user});
-
-  String ProfileImage_url = "https://randomuser.me/api/portraits/";
-  late String imageURL = RandomProfileImage();
-
-  RandomProfileImage() {
-    int rand = Random().nextInt(50);
-    if (rand % 2 == 0) {
-      return "$ProfileImage_url/women/$rand.jpg";
-    }
-    return "$ProfileImage_url/men/$rand.jpg";
-  }
-
-  late String profile_name = RandomName();
-
-  RandomName() {
-    return "${faker.Faker().person.firstName()} ${faker.Faker().person.lastName()}";
-  }
+  const NameSection({super.key, required this.user});
 }
 
 class _NameSectionState extends State<NameSection> {
-  more_menu(BuildContext context) {
+  moreMenu(BuildContext context) {
     setState(() {
       showModalBottomSheet<void>(
           backgroundColor: Color.fromARGB(255, 38, 38, 38),
@@ -69,7 +47,7 @@ class _NameSectionState extends State<NameSection> {
                           decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               gradient: LinearGradient(
-                                colors: [
+                                colors: const [
                                   Color(0xFFFF00E1), // Magenta
                                   Color(0xFFFF3030), // Red
                                   Color(0xFFFFD943)
@@ -129,7 +107,7 @@ class _NameSectionState extends State<NameSection> {
             ],
           ),
           IconButton(
-              onPressed: () => more_menu(context),
+              onPressed: () => moreMenu(context),
               icon: Icon(
                 Icons.more_vert_outlined,
                 color: Colors.white,

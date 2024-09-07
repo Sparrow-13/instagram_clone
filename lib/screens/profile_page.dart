@@ -549,13 +549,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  String getNumber(List<String> entity) {
-    if (entity == null) {
-      return "0";
-    }
-    return entity.length.toString();
-  }
-
   navigateToEditProfile() {
     Navigator.push(
       context,

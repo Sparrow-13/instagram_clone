@@ -5,6 +5,7 @@ import 'package:instagram_clone/screens/prelogin/sign_up.dart';
 import 'package:instagram_clone/screens/screen_controller.dart';
 import 'package:instagram_clone/service/auth_service.dart';
 import 'package:instagram_clone/service/login_service.dart';
+import 'package:instagram_clone/utils/log_utility.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/vertical_space.dart';
@@ -51,14 +52,20 @@ class _LoginState extends State<Login> {
     if (user != null) {
       await CacheService().saveUserToCache(user);
       updateContext(user);
+      navigateToHomepage();
+    } else {
+      _showSnackBar('Login failed. Please check your credentials.');
+    }
+  }
+  void navigateToHomepage(){
+   logStatement("Login Success");
+    if(context.mounted){
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => ScreenController(),
         ),
       );
-    } else {
-      _showSnackBar('Login failed. Please check your credentials.');
     }
   }
 

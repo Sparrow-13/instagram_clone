@@ -20,80 +20,72 @@ class CacheService {
     }
   }
 
-  Future<void> openFollowersBox() async {
-    if (!Hive.isBoxOpen(followersBoxName)) {
-      try {
-        await Hive.openBox<List<dynamic>>(
-            followersBoxName); // Open as List<dynamic>
-        logStatement("Followers box opened successfully.");
-      } catch (e) {
-        logStatement("Error opening followers box: $e");
-      }
-    } else {
-      logStatement("Followers box is already open.");
-    }
-  }
   Future<void> openAssociatedUserBox(String boxName) async {
     if (!Hive.isBoxOpen(boxName)) {
-      await Hive.openBox<List<dynamic>>(boxName);
+      try {
+        await Hive.openBox<List<dynamic>>(boxName);
+        logStatement("$boxName  opened successfully.");
+      } catch (e) {
+        logStatement("Exception while opening $boxName");
+      }
+    } else {
+      logStatement("$boxName  is already open.");
     }
   }
 
   /// Add followers to cache using `username` as the key
-  Future<void> addFollowersToCache(
-      String username, List<User> newFollowers) async {
-        await openFollowersBox(); // Ensure the followers box is open before accessing it
-        var followersBox = Hive.box<List<dynamic>>(followersBoxName); // Ensure consistent type usage
+  Future<void> addAssociatedUsersToCache<T>(
+      String username, List<T> newData, String boxName) async {
+    await openAssociatedUserBox(boxName); // Ensure the box is open
+    var box = Hive.box<List<dynamic>>(boxName);
 
-    List<User> updatedFollowers = [];
+    List<T> updatedData = [];
 
-    // Retrieve the existing list of followers from the cache
-    List<dynamic>? cachedFollowers = followersBox.get(username);
+    // Retrieve the existing list from the cache
+    List<dynamic>? cachedData = box.get(username);
 
-    if (cachedFollowers != null) {
-      // Convert cached followers to a List<User>
-      updatedFollowers = cachedFollowers.cast<User>();
+    if (cachedData != null) {
+      // Convert cached data to a List<T>
+      updatedData = cachedData.cast<T>();
 
-      // Add new followers to the existing list, ensuring no duplicates
-      final existingIds = updatedFollowers.map((user) => user.id).toSet();
-      for (var newFollower in newFollowers) {
-        if (!existingIds.contains(newFollower.id)) {
-          updatedFollowers.add(newFollower);
+      // Add new data to the existing list, ensuring no duplicates
+      final existingIds = updatedData.map((item) => item.toString()).toSet();
+      for (var newItem in newData) {
+        if (!existingIds.contains(newItem.toString())) {
+          updatedData.add(newItem);
         }
       }
     } else {
-      // If no cached followers, just use the new followers list
-      updatedFollowers = newFollowers;
+      // If no cached data, just use the new data list
+      updatedData = newData;
     }
 
     // Save the updated list back to the cache
-    await followersBox.put(username, updatedFollowers);
+    await box.put(username, updatedData);
 
-    logStatement("${updatedFollowers.length} Followers updated in cache for user $username: $updatedFollowers");
+    logStatement(
+        "${box.length} items updated in cache for user $username: $updatedData");
   }
 
   /// Retrieve followers from cache using `username` as the key
-  Future<List<User>?> getFollowersFromCache(String username) async {
-    await openFollowersBox(); // Ensure the box is open before accessing it
-    var followersBox = Hive.box<List<dynamic>>(
-        followersBoxName); // Ensure consistent type usage
-    final dynamic followersData =
-        followersBox.get(username); // Retrieve the data using username
+  Future<List<T>?> getAssociatedUsersFromCache<T>(
+      String username, String boxName) async {
+    await openAssociatedUserBox(boxName); // Ensure the box is open
+    var box = Hive.box<List<dynamic>>(boxName);
+    final dynamic data = box.get(username); // Retrieve the data using username
 
-    // Check if followersData is a List and cast it to List<User>
-    if (followersData is List) {
+    // Check if data is a List and cast it to List<T>
+    if (data is List) {
       try {
-        logStatement(
-            "No of followers found in cache : ${followersData.length}");
-        return followersData.cast<User>(); // Cast to List<User>
+        logStatement("No of items found in cache: ${data.length}");
+        return data.cast<T>(); // Cast to List<T>
       } catch (e) {
-        logStatement(
-            "Error casting followers to List<User> for user $username: $e");
+        logStatement("Error casting data to List<T> for user $username: $e");
         return null; // Return null if casting fails
       }
     }
 
-    return null; // Return null if followersData is not a List
+    return null; // Return null if data is not a List
   }
 
   /// Save a User object to the cache
@@ -126,18 +118,30 @@ class CacheService {
   }
 
   /// Clear the user cache
-  Future<void> emptyCache() async {
+  Future<void> clearAllCache() async {
+    // Open and clear the user box
     await openUserBox();
     var userBox = Hive.box<User>(userBoxName);
     await userBox.clear();
-    logStatement("Cache cleared");
-  }
+    logStatement("User cache cleared");
 
-  /// Clear the followers cache
-  Future<void> clearFollowersCache() async {
-    await openFollowersBox(); // Ensure the followers box is open before accessing it
-    var followersBox = Hive.box<List<User>>(followersBoxName); // Use List<User>
+    // Open and clear the followers box
+    await openAssociatedUserBox(followersBoxName);
+    var followersBox = Hive.box<List<dynamic>>(followersBoxName);
     await followersBox.clear();
     logStatement("Followers cache cleared");
+
+    // Add any other boxes that need to be cleared
+    await openAssociatedUserBox(followingBoxName);
+    var followingBox = Hive.box<List<dynamic>>(CacheService.followingBoxName);
+    await followingBox.clear();
+    logStatement("Following cache cleared");
+
+    await openAssociatedUserBox(requestBoxName);
+    var requestsBox = Hive.box<List<dynamic>>(CacheService.requestBoxName);
+    await requestsBox.clear();
+    logStatement("Requests cache cleared");
+
+    logStatement("All caches cleared on logout.");
   }
 }

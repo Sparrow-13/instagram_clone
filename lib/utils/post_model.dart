@@ -1,4 +1,3 @@
-// ignore_for_file: file_names, prefer_typing_uninitialized_variables, use_key_in_widget_constructors
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -7,20 +6,22 @@ import 'package:instagram_clone/components/vertical_space.dart';
 import 'package:instagram_clone/utils/post_icons.dart';
 import 'package:instagram_clone/utils/video_controller.dart';
 
+import '../entity/user/user.dart';
 import '../sources/video_source.dart';
 import 'name_section.dart';
 
 class PostModel extends StatefulWidget {
-  final user;
+  final User user;
   final bool isVideoUrl;
   final int urlSource;
-  final videoUrl;
+  final String videoUrl;
 
   const PostModel(
-      {required this.user,
+      {super.key,
+      required this.user,
       required this.isVideoUrl,
       required this.urlSource,
-      this.videoUrl});
+      this.videoUrl = ""});
 
   @override
   State<PostModel> createState() => _PostModelState();

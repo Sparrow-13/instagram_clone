@@ -5,6 +5,7 @@ import 'package:video_player/video_player.dart';
 
 class VideoController extends StatefulWidget {
   final String VideoUrl;
+
   VideoController(this.VideoUrl);
 
   @override
@@ -17,8 +18,10 @@ class _VideoControllerState extends State<VideoController> {
   ValueNotifier<VideoPlayerValue?> currentPosition = ValueNotifier(null);
 
   initVideo() {
-    _controller = VideoPlayerController.network(widget.VideoUrl,
-        videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true));
+    _controller = VideoPlayerController.networkUrl(
+      Uri.parse(widget.VideoUrl),
+      videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+    );
 
     _initializeVideoPlayerFuture = _controller!.initialize();
   }

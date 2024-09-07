@@ -59,28 +59,35 @@ class _EditProfileState extends State<EditProfile> {
 
   void upsertInformation() async {
     var updatedUserName = userNameController.text;
+
+    // Update bio and full name without async gaps
+    user.bio = bioController.text;
+    user.fullName = fullNameController.text;
+
     if (user.userName == updatedUserName) {
-      user.bio = bioController.text;
-      user.fullName = fullNameController.text;
-      UserService().updateUserByEmail(user);
-      Provider.of<GlobalContext>(context, listen: false).setUser(user);
-      CacheService().saveUserToCache(user);
-      Navigator.pop(context, 'Profile updated successfully!');
+      // No async gaps here
+      await UserService().updateUserByEmail(user);
+      _updateUserAndNavigate('Profile updated successfully!');
     } else {
-      var isUserNameAvailable =
-          (await UserService().getUserByUsername(userNameController.text) ==
-              null);
+      // Await call introduces an async gap
+      var isUserNameAvailable = (await UserService().getUserByUsername(userNameController.text) == null);
+
       if (isUserNameAvailable) {
-        user.bio = bioController.text;
-        user.fullName = fullNameController.text;
         user.userName = userNameController.text;
-        UserService().updateUserByEmail(user);
-        Provider.of<GlobalContext>(context, listen: false).setUser(user);
-        CacheService().saveUserToCache(user);
-        Navigator.pop(context, 'Profile updated successfully!');
+        await UserService().updateUserByEmail(user);
+        _updateUserAndNavigate('Profile updated successfully!');
       } else {
         _showSnackBar();
       }
+    }
+  }
+
+  /// Helper method to update user in provider and cache and then navigate back
+  void _updateUserAndNavigate(String message) {
+    if (mounted) { // Check if the widget is still mounted before using context
+      Provider.of<GlobalContext>(context, listen: false).setUser(user);
+      CacheService().saveUserToCache(user);
+      Navigator.pop(context, message);
     }
   }
 

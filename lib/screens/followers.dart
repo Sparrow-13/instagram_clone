@@ -34,7 +34,8 @@ class _FollowersState extends State<Followers> {
     _initialize();
 
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 50 &&
+      if (_scrollController.position.pixels >=
+              _scrollController.position.maxScrollExtent - 50 &&
           !_isLoading &&
           _hasMore) {
         _fetchMoreFollowers();
@@ -52,10 +53,10 @@ class _FollowersState extends State<Followers> {
     });
 
     try {
-      await _cacheService.openFollowersBox(); // Ensure the Hive box is opened
+      await _cacheService.openAssociatedUserBox(CacheService.followersBoxName);
       await _fetchInitialFollowers(); // Fetch after box is opened
     } catch (e) {
-      print("Error initializing followers: $e");
+      logStatement("Error initializing followers: $e");
       setState(() {
         _isLoading = false;
         _hasMore = false;
@@ -71,17 +72,21 @@ class _FollowersState extends State<Followers> {
 
     try {
       // Ensure the Hive box is opened before accessing it
-      await _cacheService.openFollowersBox();
+      await _cacheService.openAssociatedUserBox(
+          CacheService.followersBoxName); // Ensure the Hive box is opened
 
       // Fetch from cache first
-      List<User>? cachedFollowers = await _cacheService.getFollowersFromCache(widget.user.userName); // Await the result
+      List<User>? cachedFollowers =
+          await _cacheService.getAssociatedUsersFromCache(widget.user.userName,
+              CacheService.followersBoxName); // Await the result
       if (cachedFollowers != null && cachedFollowers.isNotEmpty) {
         setState(() {
           _followers.addAll(cachedFollowers);
           _filteredFollowers = List.from(_followers);
           _isLoading = false;
           _hasMore = cachedFollowers.length >= _pageSize;
-          _isCacheExhausted = cachedFollowers.length < widget.user.followers.length; // Check if cache covers all data
+          _isCacheExhausted = cachedFollowers.length <
+              widget.user.followers.length; // Check if cache covers all data
         });
         return; // Return if followers found in cache
       }
@@ -89,7 +94,7 @@ class _FollowersState extends State<Followers> {
       // Fetch initial followers from Firestore if not found in cache
       await _fetchFollowersFromDatabase(0); // Fetch first page
     } catch (error) {
-      print("Error fetching initial followers: $error");
+      logStatement("Error fetching initial followers: $error");
       setState(() {
         _isLoading = false;
         _hasMore = false;
@@ -122,7 +127,7 @@ class _FollowersState extends State<Followers> {
 
       await _fetchFollowersFromDatabase(_page + 1);
     } catch (error) {
-      print("Error fetching more followers: $error");
+      logStatement("Error fetching more followers: $error");
       setState(() {
         _isLoading = false;
         _hasMore = false;
@@ -144,10 +149,13 @@ class _FollowersState extends State<Followers> {
 
     List<String> userIdsSubset = widget.user.followers.sublist(
       startIndex,
-      endIndex > widget.user.followers.length ? widget.user.followers.length : endIndex,
+      endIndex > widget.user.followers.length
+          ? widget.user.followers.length
+          : endIndex,
     );
 
-    List<User> moreFollowers = await UserService().getUsersFromUserIds(widget.user.userName , userIdsSubset);
+    List<User> moreFollowers = await UserService()
+        .getUsersFromUserIds(widget.user.userName, userIdsSubset , CacheService.followersBoxName);
 
     setState(() {
       _followers.addAll(moreFollowers);
@@ -170,8 +178,8 @@ class _FollowersState extends State<Followers> {
       setState(() {
         _filteredFollowers = _followers
             .where((user) =>
-        user.userName.toLowerCase().contains(query.toLowerCase()) ||
-            user.fullName.toLowerCase().contains(query.toLowerCase()))
+                user.userName.toLowerCase().contains(query.toLowerCase()) ||
+                user.fullName.toLowerCase().contains(query.toLowerCase()))
             .toList();
       });
     }
@@ -204,7 +212,8 @@ class _FollowersState extends State<Followers> {
               cursorColor: Colors.white,
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
-                prefixIcon: Icon(Icons.search, color: Colors.white.withOpacity(0.5)),
+                prefixIcon:
+                    Icon(Icons.search, color: Colors.white.withOpacity(0.5)),
                 suffixIcon: IconButton(
                   icon: Icon(Icons.clear, color: Colors.white.withOpacity(0.5)),
                   onPressed: () {
@@ -214,7 +223,8 @@ class _FollowersState extends State<Followers> {
                 ),
                 hintText: "Search",
                 hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 labelStyle: const TextStyle(color: Colors.white),
                 border: InputBorder.none,
               ),
@@ -223,7 +233,7 @@ class _FollowersState extends State<Followers> {
         ),
         SliverList(
           delegate: SliverChildBuilderDelegate(
-                (context, index) {
+            (context, index) {
               if (index == _filteredFollowers.length && _hasMore) {
                 return SizedBox(
                   height: 40,

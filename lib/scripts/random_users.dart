@@ -47,12 +47,12 @@ Future<void> deleteAllRandomUsers() async {
 
     for (QueryDocumentSnapshot doc in querySnapshot.docs) {
       await doc.reference.delete();
-      print('User ${doc.id} deleted successfully!');
+      logStatement('User ${doc.id} deleted successfully!');
     }
 
-    print('All random users have been deleted successfully!');
+    logStatement('All random users have been deleted successfully!');
   } catch (e) {
-    print('Failed to delete random users: $e');
+    logStatement('Failed to delete random users: $e');
   }
 }
 
@@ -62,7 +62,7 @@ Future<List<String>> fetchRandomUserIds(int limit) async {
     QuerySnapshot querySnapshot = await usersCollection.limit(limit).get();
     return querySnapshot.docs.map((doc) => doc.id).toList();
   } catch (e) {
-    print('Failed to fetch random users: $e');
+    logStatement('Failed to fetch random users: $e');
     return [];
   }
 }
@@ -76,7 +76,7 @@ Future<void> updateUserWithRandomUsers(String userId, List<String> requestUserId
       DocumentSnapshot snapshot = await transaction.get(userDocRef);
 
       if (!snapshot.exists) {
-        print("User does not exist!");
+        logStatement("User does not exist!");
         return;
       }
 
@@ -97,9 +97,9 @@ Future<void> updateUserWithRandomUsers(String userId, List<String> requestUserId
       });
     });
 
-    print('User $userId updated with random users successfully!');
+    logStatement('User $userId updated with random users successfully!');
   } catch (e) {
-    print('Failed to update user: $e');
+    logStatement('Failed to update user: $e');
   }
 }
 

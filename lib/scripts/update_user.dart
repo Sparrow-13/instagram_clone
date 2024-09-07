@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../utils/log_utility.dart';
+
 class UpdateUser {
   final CollectionReference usersCollection =
       FirebaseFirestore.instance.collection('user');
@@ -17,12 +19,12 @@ class UpdateUser {
         // Update the document with the document ID
         await doc.reference.update({'id': docId});
 
-        print('Updated user with ID: $docId');
+        logStatement('Updated user with ID: $docId');
       }
 
-      print('All users updated with document IDs.');
+      logStatement('All users updated with document IDs.');
     } catch (e) {
-      print('Error updating users with document IDs: $e');
+      logStatement('Error updating users with document IDs: $e');
     }
   }
 }

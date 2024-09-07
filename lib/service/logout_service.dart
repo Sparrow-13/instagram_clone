@@ -5,7 +5,7 @@ import 'package:instagram_clone/service/auth_service.dart';
 class LogoutService {
   void logout() {
     AuthService().logoutUser();
-    CacheService().emptyCache();
+    CacheService().clearAllCache();
     GlobalContext().removeUser();
   }
 }
