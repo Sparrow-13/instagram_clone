@@ -34,7 +34,7 @@ void createRandomUsers(int count) async {
     await userService.addUser(user);
   }
 
-  logStatement('$count random users have been created and added to Firestore.');
+  LoggingService.logStatement('$count random users have been created and added to Firestore.');
 }
 
 Future<void> deleteAllRandomUsers() async {
@@ -47,12 +47,12 @@ Future<void> deleteAllRandomUsers() async {
 
     for (QueryDocumentSnapshot doc in querySnapshot.docs) {
       await doc.reference.delete();
-      logStatement('User ${doc.id} deleted successfully!');
+      LoggingService.logStatement('User ${doc.id} deleted successfully!');
     }
 
-    logStatement('All random users have been deleted successfully!');
+    LoggingService.logStatement('All random users have been deleted successfully!');
   } catch (e) {
-    logStatement('Failed to delete random users: $e');
+    LoggingService.logStatement('Failed to delete random users: $e');
   }
 }
 
@@ -62,7 +62,7 @@ Future<List<String>> fetchRandomUserIds(int limit) async {
     QuerySnapshot querySnapshot = await usersCollection.limit(limit).get();
     return querySnapshot.docs.map((doc) => doc.id).toList();
   } catch (e) {
-    logStatement('Failed to fetch random users: $e');
+    LoggingService.logStatement('Failed to fetch random users: $e');
     return [];
   }
 }
@@ -76,7 +76,7 @@ Future<void> updateUserWithRandomUsers(String userId, List<String> requestUserId
       DocumentSnapshot snapshot = await transaction.get(userDocRef);
 
       if (!snapshot.exists) {
-        logStatement("User does not exist!");
+        LoggingService.logStatement("User does not exist!");
         return;
       }
 
@@ -97,9 +97,9 @@ Future<void> updateUserWithRandomUsers(String userId, List<String> requestUserId
       });
     });
 
-    logStatement('User $userId updated with random users successfully!');
+    LoggingService.logStatement('User $userId updated with random users successfully!');
   } catch (e) {
-    logStatement('Failed to update user: $e');
+    LoggingService.logStatement('Failed to update user: $e');
   }
 }
 

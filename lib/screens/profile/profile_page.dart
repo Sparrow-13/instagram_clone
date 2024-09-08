@@ -5,15 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:instagram_clone/context/global_context.dart';
-import 'package:instagram_clone/screens/edit_profile.dart';
-import 'package:instagram_clone/screens/people_tabview.dart';
+import 'package:instagram_clone/screens/profile/edit_profile.dart';
+import 'package:instagram_clone/screens/profile/people_tabview.dart';
 import 'package:instagram_clone/screens/prelogin/login.dart';
 import 'package:instagram_clone/screens/specific_post.dart';
 import 'package:instagram_clone/service/logout_service.dart';
 import 'package:instagram_clone/service/suggestion_service.dart';
 import 'package:provider/provider.dart';
 
-import '../entity/user/user.dart';
+import '../../entity/user/user.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});

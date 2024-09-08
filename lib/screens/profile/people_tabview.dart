@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:instagram_clone/screens/followers.dart';
-import 'package:instagram_clone/screens/followings.dart';
+import 'package:instagram_clone/screens/profile/followers.dart';
+import 'package:instagram_clone/screens/profile/followings.dart';
 
-import '../entity/user/user.dart';
+import '../../entity/user/user.dart';
 
 class PeopleTabView extends StatefulWidget {
   final User user;

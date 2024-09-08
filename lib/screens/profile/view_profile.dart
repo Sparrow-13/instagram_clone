@@ -2,11 +2,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:instagram_clone/screens/people_tabview.dart';
+import 'package:instagram_clone/screens/profile/people_tabview.dart';
 import 'package:instagram_clone/screens/specific_post.dart';
 import 'package:instagram_clone/service/suggestion_service.dart';
 
-import '../entity/user/user.dart';
+import '../../entity/user/user.dart';
 
 class ViewProfile extends StatefulWidget {
   final User user;

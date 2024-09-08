@@ -19,12 +19,12 @@ class UpdateUser {
         // Update the document with the document ID
         await doc.reference.update({'id': docId});
 
-        logStatement('Updated user with ID: $docId');
+        LoggingService.logStatement('Updated user with ID: $docId');
       }
 
-      logStatement('All users updated with document IDs.');
+      LoggingService.logStatement('All users updated with document IDs.');
     } catch (e) {
-      logStatement('Error updating users with document IDs: $e');
+      LoggingService.logStatement('Error updating users with document IDs: $e');
     }
   }
 }

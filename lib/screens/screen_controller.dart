@@ -1,6 +1,6 @@
 import 'package:instagram_clone/screens/homepage.dart';
 import 'package:instagram_clone/screens/prelogin/login.dart';
-import 'package:instagram_clone/screens/profile_page.dart';
+import 'package:instagram_clone/screens/profile/profile_page.dart';
 import 'package:instagram_clone/screens/reels_page.dart';
 import 'package:instagram_clone/screens/search_screen.dart';
 import 'package:flutter/material.dart';

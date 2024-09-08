@@ -11,8 +11,8 @@ class PostService with ChangeNotifier {
         FirebaseFirestore.instance.collection('post');
     return postReference
         .add(post.toMap())
-        .then((value) => logStatement("Post added successfully!"))
-        .catchError((error) => logStatement("Failed to add Post: $error"));
+        .then((value) => LoggingService.logStatement("Post added successfully!"))
+        .catchError((error) => LoggingService.logStatement("Failed to add Post: $error"));
   }
 
   Future<void> getAllPost() {
@@ -20,10 +20,10 @@ class PostService with ChangeNotifier {
         FirebaseFirestore.instance.collection('post');
     return postReference.get().then((QuerySnapshot snapshot) {
       for (var doc in snapshot.docs) {
-        logStatement('${doc.id} => ${doc.data()}');
+        LoggingService.logStatement('${doc.id} => ${doc.data()}');
       }
     }).catchError((error) {
-      logStatement("Failed to fetch post: $error");
+      LoggingService.logStatement("Failed to fetch post: $error");
       return null;
     });
   }

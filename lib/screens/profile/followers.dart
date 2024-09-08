@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/components/list_card.dart';
 import 'package:instagram_clone/context/cache_service.dart';
-import 'package:instagram_clone/screens/view_profile.dart';
+import 'package:instagram_clone/screens/profile/view_profile.dart';
 import 'package:instagram_clone/utils/log_utility.dart';
 
-import '../entity/user/user.dart';
-import '../service/user_service.dart';
+import '../../entity/user/user.dart';
+import '../../service/user_service.dart';
 
 class Followers extends StatefulWidget {
   final User user;
@@ -56,7 +56,7 @@ class _FollowersState extends State<Followers> {
       await _cacheService.openAssociatedUserBox(CacheService.followersBoxName);
       await _fetchInitialFollowers(); // Fetch after box is opened
     } catch (e) {
-      logStatement("Error initializing followers: $e");
+      LoggingService.logStatement("Error initializing followers: $e");
       setState(() {
         _isLoading = false;
         _hasMore = false;
@@ -94,7 +94,7 @@ class _FollowersState extends State<Followers> {
       // Fetch initial followers from Firestore if not found in cache
       await _fetchFollowersFromDatabase(0); // Fetch first page
     } catch (error) {
-      logStatement("Error fetching initial followers: $error");
+      LoggingService.logStatement("Error fetching initial followers: $error");
       setState(() {
         _isLoading = false;
         _hasMore = false;
@@ -127,7 +127,7 @@ class _FollowersState extends State<Followers> {
 
       await _fetchFollowersFromDatabase(_page + 1);
     } catch (error) {
-      logStatement("Error fetching more followers: $error");
+      LoggingService.logStatement("Error fetching more followers: $error");
       setState(() {
         _isLoading = false;
         _hasMore = false;
