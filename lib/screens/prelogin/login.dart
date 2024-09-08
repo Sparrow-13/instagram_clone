@@ -58,7 +58,7 @@ class _LoginState extends State<Login> {
     }
   }
   void navigateToHomepage(){
-   logStatement("Login Success");
+   LoggingService.logStatement("Login Success");
     if(context.mounted){
       Navigator.pushReplacement(
         context,

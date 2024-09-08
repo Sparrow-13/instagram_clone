@@ -87,7 +87,7 @@ class User extends HiveObject {
 
   factory User.fromFireStore(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-    logStatement(data.toString());
+    LoggingService.logStatement(data.toString());
     List<String> convertReferencesToIds(List<dynamic> references) {
       return references.map((ref) {
         if (ref is DocumentReference) {

@@ -7,10 +7,10 @@ class LoginService {
   Future<User?>? checkLogin(String username, String password) async {
     User? user = await UserService().getUserByUsername(username);
     if (user != null && user.password == password) {
-      logStatement("User Found : ${user.toMap()}");
+      LoggingService.logStatement("User Found : ${user.toMap()}");
       return user;
     } else {
-      logStatement("User Not Found");
+      LoggingService.logStatement("User Not Found");
     }
     return null;
   }
@@ -19,10 +19,10 @@ class LoginService {
       String username, String email, String password, String fullName) async {
     User? user = await UserService().getUserByUsername(username);
     if (user != null) {
-      logStatement("User Exists : ${user.toMap()}");
+      LoggingService.logStatement("User Exists : ${user.toMap()}");
       return null;
     } else {
-      logStatement("new User");
+      LoggingService.logStatement("new User");
       var user = User(
           id: "",
           userName: username,

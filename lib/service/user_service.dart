@@ -24,10 +24,10 @@ class UserService with ChangeNotifier {
   Future<void> getAllUser() {
     return usersCollection.get().then((QuerySnapshot snapshot) {
       for (var doc in snapshot.docs) {
-        logStatement('${doc.id} => ${doc.data()}');
+        LoggingService.logStatement('${doc.id} => ${doc.data()}');
       }
     }).catchError((error) {
-      logStatement("Failed to fetch users: $error");
+      LoggingService.logStatement("Failed to fetch users: $error");
       return null;
     });
   }
@@ -49,7 +49,7 @@ class UserService with ChangeNotifier {
     if (user != null) {
       List<User> followers = await getUsersFromIds(user.followers);
       for (User follower in followers) {
-        logStatement('Follower: ${follower.userName}');
+        LoggingService.logStatement('Follower: ${follower.userName}');
       }
     }
   }
@@ -66,14 +66,14 @@ class UserService with ChangeNotifier {
         return null; // User not found
       }
     } catch (e) {
-      logStatement('Error fetching user: $e');
+      LoggingService.logStatement('Error fetching user: $e');
       return null; // Handle errors gracefully
     }
   }
 
   static Future<User?> fetchAndUseUser(currentUserId) async {
     if (currentUserId == null) {
-      logStatement("userId is empty");
+      LoggingService.logStatement("userId is empty");
       return null;
     }
     UserService userService = UserService();
@@ -82,14 +82,14 @@ class UserService with ChangeNotifier {
     if (user != null) {
       return user;
     } else {
-      logStatement('User not found.');
+      LoggingService.logStatement('User not found.');
     }
     return null;
   }
 
   static Future<User?> fetchAndUseUserByUsername(username) async {
     if (username == null) {
-      logStatement("username is empty");
+      LoggingService.logStatement("username is empty");
       return null;
     }
     UserService userService = UserService();
@@ -98,7 +98,7 @@ class UserService with ChangeNotifier {
     if (user != null) {
       return user;
     } else {
-      logStatement('User not found.');
+      LoggingService.logStatement('User not found.');
     }
     return null;
   }
@@ -115,7 +115,7 @@ class UserService with ChangeNotifier {
         return null; // User not found
       }
     } catch (e) {
-      logStatement('Error fetching user by username: $e');
+      LoggingService.logStatement('Error fetching user by username: $e');
       return null; // Handle errors gracefully
     }
   }
@@ -134,23 +134,22 @@ class UserService with ChangeNotifier {
                 user.toMap(),
                 SetOptions(
                     merge: true)) // Merge updated fields with existing data
-            .then((value) => logStatement(
+            .then((value) => LoggingService.logStatement(
                 "Account updated successfully for user with email ${user.email}!"))
             .catchError(
-                (error) => logStatement("Failed to update user: $error"));
+                (error) => LoggingService.logStatement("Failed to update user: $error"));
       }
     } else {
-      logStatement("No user found with email ${user.email}.");
+      LoggingService.logStatement("No user found with email ${user.email}.");
     }
   }
 
   Future<List<User>> getUsersFromUserIds(
-      String userName, List<String> userIds , String boxName) async {
+      String userName, List<String> userIds, String boxName) async {
     List<User> users = [];
 
     // Open the Hive box
-    var cacheBox =
-        await Hive.openBox<List<dynamic>>(CacheService.followersBoxName);
+    var cacheBox = await Hive.openBox<List<dynamic>>(boxName);
 
     List<String> idsToFetchFromFirestore = [];
 
@@ -171,6 +170,7 @@ class UserService with ChangeNotifier {
       idsToFetchFromFirestore.addAll(userIds);
     }
 
+    // Fetch missing data from Firestore
     if (idsToFetchFromFirestore.isNotEmpty) {
       for (int i = 0; i < idsToFetchFromFirestore.length; i += 10) {
         var end = (i + 10 < idsToFetchFromFirestore.length)
@@ -179,24 +179,21 @@ class UserService with ChangeNotifier {
         var batchIds = idsToFetchFromFirestore.sublist(i, end);
 
         try {
-          // Firestore query
           var querySnapshot = await _fireStore
               .collection('user')
               .where(FieldPath.documentId, whereIn: batchIds)
               .get();
 
           var fetchedUsers = querySnapshot.docs.map((doc) {
-            // Create User object from DocumentSnapshot
-            var user = User.fromFireStore(doc);
-            return user;
+            return User.fromFireStore(doc);
           }).toList();
 
           users.addAll(fetchedUsers);
 
           // Update cache with fetched users
-          await CacheService().addAssociatedUsersToCache(userName, users , boxName);
+          await CacheService().addAssociatedUsersToCache(userName, fetchedUsers, boxName);
         } catch (e) {
-          logStatement("Error fetching users from Firestore: $e");
+          LoggingService.logStatement("Error fetching users from Firestore: $e");
         }
       }
     }

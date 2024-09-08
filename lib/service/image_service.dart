@@ -29,16 +29,16 @@ class ImageService {
 
       // Show a progress indicator
       uploadTask.snapshotEvents.listen((TaskSnapshot snapshot) {
-        logStatement('Task state: ${snapshot.state}');
-        logStatement('Progress: ${(snapshot.bytesTransferred / snapshot.totalBytes) * 100} %');
+        LoggingService.logStatement('Task state: ${snapshot.state}');
+        LoggingService.logStatement('Progress: ${(snapshot.bytesTransferred / snapshot.totalBytes) * 100} %');
       });
 
       // Wait for the upload to complete
-      await uploadTask.whenComplete(() => logStatement('File uploaded successfully'));
+      await uploadTask.whenComplete(() => LoggingService.logStatement('File uploaded successfully'));
 
       // Get the download URL
       String downloadURL = await ref.getDownloadURL();
-      logStatement('Download URL: $downloadURL');
+      LoggingService.logStatement('Download URL: $downloadURL');
 
       // Update user information with new image URL
       user.imageUrl = downloadURL;
@@ -55,7 +55,7 @@ class ImageService {
         );
       }
     } catch (e) {
-      logStatement('Error uploading image: $e');
+      LoggingService.logStatement('Error uploading image: $e');
 
       // Use a mounted check before using context
       if (context.mounted) {
@@ -82,21 +82,21 @@ class ImageService {
 
       // Monitor the progress of the upload
       uploadTask.snapshotEvents.listen((TaskSnapshot snapshot) {
-        logStatement('Task state: ${snapshot.state}');
-        logStatement(
+        LoggingService.logStatement('Task state: ${snapshot.state}');
+        LoggingService.logStatement(
             'Progress: ${(snapshot.bytesTransferred / snapshot.totalBytes) * 100} %');
       });
 
       await uploadTask;
-      logStatement('File uploaded successfully');
+      LoggingService.logStatement('File uploaded successfully');
     } on FirebaseException catch (e) {
       if (e.code == 'unauthorized') {
-        logStatement('User does not have permission to upload to this location.');
+        LoggingService.logStatement('User does not have permission to upload to this location.');
       } else {
-        logStatement('Firebase Storage Error: ${e.message}');
+        LoggingService.logStatement('Firebase Storage Error: ${e.message}');
       }
     } catch (e) {
-      logStatement('Error uploading file: $e');
+      LoggingService.logStatement('Error uploading file: $e');
     }
   }
 
