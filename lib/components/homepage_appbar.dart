@@ -8,64 +8,63 @@ import 'package:provider/provider.dart';
 class HomePageAppBar extends StatelessWidget {
   const HomePageAppBar({super.key});
 
-  void showPopupMenu(BuildContext context) {
+  void showPopupMenu(BuildContext context, Offset offset, Size size) {
     showMenu<String>(
       context: context,
-      position: RelativeRect.fromLTRB(0.0, 90.0, 0.0, 0.0),
+      position: RelativeRect.fromLTRB(
+        offset.dx, // X position from left
+        offset.dy + size.height, // Y position just below the widget
+        offset.dx + size.width, // Right boundary
+        offset.dy + size.height + 1, // Bottom boundary
+      ),
       color: Color.fromARGB(210, 0, 0, 0),
       items: [
         PopupMenuItem<String>(
           padding: EdgeInsets.zero,
           value: 'following',
           height: 40,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              SizedBox(
-                width: 10,
-              ),
-              Text(
-                'Following',
-                style: TextStyle(
-                  color: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.all(10), // Add padding
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: const [
+                Text(
+                  'Following',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Icon(
-                Icons.people_outline,
-                color: Colors.white,
-                size: 20,
-              )
-            ],
+                Icon(
+                  Icons.people_outline,
+                  color: Colors.white,
+                  size: 20,
+                ),
+              ],
+            ),
           ),
         ),
         PopupMenuItem<String>(
           height: 40,
           padding: EdgeInsets.zero,
           value: 'favourite',
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              SizedBox(
-                width: 10,
-              ),
-              Text(
-                'Favourite',
-                style: TextStyle(
-                  color: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.all(10), // Add padding
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: const [
+                Text(
+                  'Favourite',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Icon(
-                Icons.star_border,
-                color: Colors.white,
-                size: 20,
-              )
-            ],
+                Icon(
+                  Icons.star_border,
+                  color: Colors.white,
+                  size: 20,
+                ),
+              ],
+            ),
           ),
         ),
       ],
@@ -77,9 +76,17 @@ class HomePageAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     var user = Provider.of<GlobalContext>(context, listen: false).user;
 
+    final GlobalKey appBarKey = GlobalKey();
+
     return AppBar(
+      key: appBarKey,
       title: GestureDetector(
-        onTap: () => showPopupMenu(context), // Updated callback
+        onTapDown: (TapDownDetails details) {
+          final RenderBox renderBox = appBarKey.currentContext?.findRenderObject() as RenderBox;
+          final Offset widgetOffset = renderBox.localToGlobal(Offset.zero);
+          final Size widgetSize = renderBox.size;
+          showPopupMenu(context, widgetOffset, widgetSize);
+        },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: const [
