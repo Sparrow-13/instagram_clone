@@ -178,13 +178,18 @@ class _RequestState extends State<Request> {
   }
 
   void _handleConfirm(User user) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Confirmed ${user.userName}\'s Request')),
+    );
     // Handle confirm action
     LoggingService.logStatement(
         "_RequestState - _handleConfirm: Confirming request for ${user.userName}");
   }
 
   void _handleReject(User user) {
-    // Handle reject action
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Deleted ${user.userName}\'s Request')),
+    );
     LoggingService.logStatement(
         "_RequestState - _handleReject: Rejecting request for ${user.userName}");
   }
