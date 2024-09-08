@@ -56,7 +56,7 @@ class _FollowingState extends State<Following> {
       await _cacheService.openAssociatedUserBox(CacheService.followingBoxName);
       await _fetchInitialFollowing(); // Fetch after box is opened
     } catch (e) {
-      LoggingService.logStatement("Error initializing following: $e");
+      LoggingService.logStatement("_FollowingsState - _initialize: Error initializing following: $e");
       setState(() {
         _isLoading = false;
         _hasMore = false;
@@ -72,13 +72,10 @@ class _FollowingState extends State<Following> {
 
     try {
       // Ensure the Hive box is opened before accessing it
-      await _cacheService.openAssociatedUserBox(
-          CacheService.followingBoxName); // Ensure the Hive box is opened
+      await _cacheService.openAssociatedUserBox(CacheService.followingBoxName); // Ensure the Hive box is opened
 
       // Fetch from cache first
-      List<User>? cachedFollowing =
-      await _cacheService.getAssociatedUsersFromCache(widget.user.userName,
-          CacheService.followingBoxName); // Await the result
+      List<User>? cachedFollowing = await _cacheService.getAssociatedUsersFromCache(widget.user.userName, CacheService.followingBoxName); // Await the result
       if (cachedFollowing != null && cachedFollowing.isNotEmpty) {
         setState(() {
           _following.addAll(cachedFollowing);
@@ -88,13 +85,14 @@ class _FollowingState extends State<Following> {
           _isCacheExhausted = cachedFollowing.length <
               widget.user.following.length; // Check if cache covers all data
         });
+        LoggingService.logStatement("_FollowingState - _fetchInitialFollowing: Fetched following from cache.");
         return;
       }
 
 
       await _fetchFollowingFromDatabase(0); // Fetch first page
     } catch (error) {
-      LoggingService.logStatement("Error fetching initial following: $error");
+      LoggingService.logStatement("_FollowingState - _fetchInitialFollowing: Error fetching initial following: $error");
       setState(() {
         _isLoading = false;
         _hasMore = false;
@@ -127,7 +125,7 @@ class _FollowingState extends State<Following> {
 
       await _fetchFollowingFromDatabase(_page + 1);
     } catch (error) {
-      LoggingService.logStatement("Error fetching more following: $error");
+      LoggingService.logStatement("_FollowingState - _fetchMoreFollowing: Error fetching more following: $error");
       setState(() {
         _isLoading = false;
         _hasMore = false;
@@ -153,12 +151,22 @@ class _FollowingState extends State<Following> {
           ? widget.user.following.length
           : endIndex,
     );
+    LoggingService.logStatement("_FollowingState - _fetchFollowersFromDatabase: fetching following from index $startIndex to $endIndex");
 
     List<User> moreFollowing = await UserService()
         .getUsersFromUserIds(widget.user.userName, userIdsSubset , CacheService.followingBoxName);
 
+    // Handle duplicates in the fetched data
+    for (var newFollowing in moreFollowing) {
+      if (!_following.any((user) => user.userName == newFollowing.userName)) {
+        _following.add(newFollowing);
+      } else {
+        LoggingService.logStatement(
+            "_FollowersState - _fetchFollowersFromDatabase: Duplicate detected for user ${newFollowing.userName}.");
+      }
+    }
+
     setState(() {
-      _following.addAll(moreFollowing);
       _filteredFollowing = List.from(_following);
       _isLoading = false;
       _page++;
