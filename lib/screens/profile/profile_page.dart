@@ -2,17 +2,20 @@ import 'dart:math';
 
 import 'package:faker/faker.dart' as faker;
 import 'package:flutter/material.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:instagram_clone/context/global_context.dart';
+import 'package:instagram_clone/screens/request.dart';
+import 'package:instagram_clone/screens/prelogin/login.dart';
 import 'package:instagram_clone/screens/profile/edit_profile.dart';
 import 'package:instagram_clone/screens/profile/people_tabview.dart';
-import 'package:instagram_clone/screens/prelogin/login.dart';
 import 'package:instagram_clone/screens/specific_post.dart';
 import 'package:instagram_clone/service/logout_service.dart';
 import 'package:instagram_clone/service/suggestion_service.dart';
 import 'package:provider/provider.dart';
 
+import '../../components/menu_item.dart';
 import '../../entity/user/user.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -216,7 +219,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 )),
             IconButton(
                 onPressed: () {
-                  navigateToLoginScreen(context);
+                  var menuItems = getProfileMenuItems(context, user);
+                  showPopupMenu(context, menuItems);
                 },
                 icon: FaIcon(
                   FontAwesomeIcons.bars,
@@ -298,7 +302,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => PeopleTabView(user: user , tabIndex: 0,),
+                              builder: (context) => PeopleTabView(
+                                user: user,
+                                tabIndex: 0,
+                              ),
                             ),
                           );
                         },
@@ -325,7 +332,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => PeopleTabView(user: user , tabIndex: 1,),
+                              builder: (context) => PeopleTabView(
+                                user: user,
+                                tabIndex: 1,
+                              ),
                             ),
                           );
                         },
@@ -556,12 +566,77 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  getProfileMenuItems(context, user) {
+    var logout = MenuItem(
+        title: "Logout",
+        icon: Icons.logout,
+        onClick: () => navigateToLoginScreen(context));
+    var request = MenuItem(
+        title: "Requests",
+        icon: FeatherIcons.heart,
+        onClick: () => navigateToRequestPage(context, user));
+    List<MenuItem> menuItems = [];
+    menuItems.add(request);
+    menuItems.add(logout);
+    return menuItems;
+  }
+
+  showPopupMenu(BuildContext context, List<MenuItem> menuItems) {
+    var width = MediaQuery.of(context).size.width;
+    return showMenu<String>(
+      context: context,
+      position: RelativeRect.fromLTRB(width, 90.0, 0, 0.0),
+      color: const Color.fromARGB(210, 0, 0, 0),
+      items: List.generate(menuItems.length, (index) {
+        return PopupMenuItem<String>(
+          padding: EdgeInsets.zero,
+          value: menuItems[index].title,
+          height: 40,
+          child: InkWell(
+            onTap: () {
+              Navigator.pop(context); // Close the popup menu
+              menuItems[index].onClick(); // Execute the callback
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              // Ensure space between text and icon
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  // Padding for text
+                  child: Text(
+                    menuItems[index].title,
+                    style: const TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                Icon(
+                  menuItems[index].icon,
+                  color: Colors.white,
+                  size: 20,
+                ),
+              ],
+            ),
+          ),
+        );
+      }),
+    );
+  }
+
   void navigateToLoginScreen(BuildContext context) {
     LogoutService().logout();
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => Login()),
       (Route<dynamic> route) => false,
+    );
+  }
+
+  void navigateToRequestPage(BuildContext context, User user) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Request(user: user)),
     );
   }
 }
