@@ -40,7 +40,7 @@ class _PeopleTabViewState extends State<PeopleTabView> {
                 text: "${widget.user.followers.length} Followers",
               ),
               Tab(
-                text: "${widget.user.followers.length} Following",
+                text: "${widget.user.following.length} Following",
               ),
               Tab(
                 text: "0 Subscription",
