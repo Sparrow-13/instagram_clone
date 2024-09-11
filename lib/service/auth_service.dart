@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:instagram_clone/service/user_service.dart';
 import 'package:instagram_clone/utils/log_utility.dart';
 
 import '../entity/user/user.dart' as user;
@@ -34,6 +35,36 @@ class AuthService {
       LoggingService.logStatement('General Error signing in user: $e');
     }
   }
+
+  /// Sign Up Method
+  Future<user.User?> signUpWithEmailAndPassword(user.User customUser) async {
+    try {
+      // Create a new user with email and password in Firebase Auth
+      UserCredential userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
+        email: customUser.email,
+        password: customUser.password,
+      );
+
+      // Get the newly created Firebase user
+      User? firebaseUser = userCredential.user;
+      if (firebaseUser != null) {
+        LoggingService.logStatement("Auth User Created with UID: ${firebaseUser.uid}");
+
+        // Set the custom user ID to the Firebase UID
+        customUser.id = firebaseUser.uid;
+
+        // Add the custom user to Firestore using the UserService
+        await UserService().addUser(customUser);
+        LoggingService.logStatement("Custom User added to Firestore with UID: ${firebaseUser.uid}");
+
+        return customUser;
+      }
+    } catch (e) {
+      LoggingService.logStatement("Error signing up: $e");
+    }
+    return null;
+  }
+
 
 
   Future<void> logoutUser() async {
