@@ -70,4 +70,8 @@ class UpdateUser {
       LoggingService.logStatement("Error fetching users from Firestore: $e");
     }
   }
+  List<String> removeCommonFollowers(List<String> followers, List<String> requests) {
+    Set<String> requestsSet = requests.toSet();
+    return followers.where((follower) => !requestsSet.contains(follower)).toList();
+  }
 }
