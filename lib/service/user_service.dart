@@ -34,14 +34,22 @@ class UserService with ChangeNotifier {
 
   Future<List<User>> getUsersFromIds(List<String> userIds) async {
     List<User> users = [];
-    for (String userId in userIds) {
-      User? user = await getUserById(userId);
-      if (user != null) {
-        users.add(user);
-      }
+    int batchSize = 10; // Batch size
+
+    // Split the list of userIds into batches of 10
+    for (int i = 0; i < userIds.length; i += batchSize) {
+      List<String> batch = userIds.sublist(i, i + batchSize > userIds.length ? userIds.length : i + batchSize);
+
+      // Fetch users for the current batch concurrently
+      List<User?> fetchedUsers = await Future.wait(batch.map((userId) => getUserById(userId)));
+
+      // Filter out null values and add the found users to the list
+      users.addAll(fetchedUsers.whereType<User>());
     }
+
     return users;
   }
+
 
 // Example usage:
   Future<void> fetchAndPrintFollowers(String userId) async {

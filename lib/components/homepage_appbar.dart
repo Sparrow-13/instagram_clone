@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:instagram_clone/context/global_context.dart';
-import 'package:instagram_clone/screens/Request.dart';
+import 'package:instagram_clone/screens/notification_screen.dart';
 import 'package:provider/provider.dart';
 
 class HomePageAppBar extends StatelessWidget {
@@ -82,7 +82,8 @@ class HomePageAppBar extends StatelessWidget {
       key: appBarKey,
       title: GestureDetector(
         onTapDown: (TapDownDetails details) {
-          final RenderBox renderBox = appBarKey.currentContext?.findRenderObject() as RenderBox;
+          final RenderBox renderBox =
+              appBarKey.currentContext?.findRenderObject() as RenderBox;
           final Offset widgetOffset = renderBox.localToGlobal(Offset.zero);
           final Size widgetSize = renderBox.size;
           showPopupMenu(context, widgetOffset, widgetSize);
@@ -113,7 +114,11 @@ class HomePageAppBar extends StatelessWidget {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Request(user: user!)),
+              // MaterialPageRoute(builder: (context) => Request(user: user!)),
+              MaterialPageRoute(
+                  builder: (context) => NotificationScreen(
+                        user: user!,
+                      )),
             );
           },
           icon: FaIcon(
