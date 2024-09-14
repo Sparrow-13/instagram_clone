@@ -5,7 +5,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:instagram_clone/components/vertical_space.dart';
 import 'package:instagram_clone/context/cache_service.dart';
 import 'package:instagram_clone/context/global_context.dart';
-import 'package:instagram_clone/service/auth_service.dart';
 import 'package:instagram_clone/service/image_service.dart';
 import 'package:instagram_clone/service/user_service.dart';
 import 'package:provider/provider.dart';

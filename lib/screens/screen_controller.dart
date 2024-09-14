@@ -31,7 +31,7 @@ class _ScreenControllerState extends State<ScreenController> {
     List screens = [
       HomePage(),
       SearchScreen(),
-      NotificationScreen(user: user),
+      NotificationScreen(loggedInUser: user),
       ReelsScreen(),
       ProfileScreen()
     ];

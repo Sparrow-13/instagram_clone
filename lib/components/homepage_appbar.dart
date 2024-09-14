@@ -117,7 +117,7 @@ class HomePageAppBar extends StatelessWidget {
               // MaterialPageRoute(builder: (context) => Request(user: user!)),
               MaterialPageRoute(
                   builder: (context) => NotificationScreen(
-                        user: user!,
+                        loggedInUser: user!,
                       )),
             );
           },

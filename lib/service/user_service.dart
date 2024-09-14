@@ -21,15 +21,20 @@ class UserService with ChangeNotifier {
     await docRef.update({'id': docId});
   }
 
-  Future<void> getAllUser() {
-    return usersCollection.get().then((QuerySnapshot snapshot) {
-      for (var doc in snapshot.docs) {
-        LoggingService.logStatement('${doc.id} => ${doc.data()}');
-      }
-    }).catchError((error) {
+  Future<List<User>> getAllUsers() async {
+    try {
+      QuerySnapshot snapshot = await usersCollection.get();
+
+      // Map the documents into a list of User objects
+      List<User> users = snapshot.docs.map((doc) {
+        return User.fromFireStore(doc);
+      }).toList();
+
+      return users;
+    } catch (error) {
       LoggingService.logStatement("Failed to fetch users: $error");
-      return null;
-    });
+      return [];
+    }
   }
 
   Future<List<User>> getUsersFromIds(List<String> userIds) async {
@@ -208,4 +213,6 @@ class UserService with ChangeNotifier {
 
     return users;
   }
+
+  fetchUsersOtherThanUsersFollowing(User user) {}
 }

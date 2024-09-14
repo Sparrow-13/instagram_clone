@@ -6,9 +6,9 @@ import 'package:instagram_clone/service/user_service.dart';
 import '../components/vertical_space.dart';
 
 class NotificationScreen extends StatefulWidget {
-  const NotificationScreen({super.key, required this.user});
+  const NotificationScreen({super.key, required this.loggedInUser});
 
-  final User user;
+  final User loggedInUser;
 
   @override
   State<NotificationScreen> createState() => _NotificationScreenState();
@@ -47,10 +47,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
               onTap: () => {
                 Navigator.push(
                   context,
-                  // MaterialPageRoute(builder: (context) => Request(user: user!)),
                   MaterialPageRoute(
                       builder: (context) => Request(
-                            user: widget.user!,
+                            loggedInUser: widget.loggedInUser,
                           )),
                 )
               },
@@ -100,9 +99,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.start,
-                            children: const [
+                            children: [
                               Text(
-                                "Follow Request",
+                                "${widget.loggedInUser.request.length} Follow Request",
                                 style: TextStyle(
                                   fontSize: 14,
                                   overflow: TextOverflow.ellipsis,
@@ -153,7 +152,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
   Future<List<User>?> getRequestUsers() async {
     var request =
-        widget.user.request; // Assuming 'request' is a list of user IDs
+        widget.loggedInUser.request; // Assuming 'request' is a list of user IDs
     if (request.isEmpty) {
       return null;
     }
