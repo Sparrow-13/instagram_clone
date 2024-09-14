@@ -65,7 +65,26 @@ class AuthService {
     return null;
   }
 
-
+  Future<void> updateAuthUserEmail(String newEmail, user.User currentUser) async {
+    try {
+      User? firebaseUser = _firebaseAuth.currentUser;
+      if (firebaseUser != null) {
+        // Update email in Firebase Auth
+        await firebaseUser.verifyBeforeUpdateEmail(newEmail);
+        LoggingService.logStatement('Email updated in Firebase Auth successfully.');
+      } else {
+        LoggingService.logStatement('No authenticated user found.');
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'requires-recent-login') {
+        LoggingService.logStatement('Please re-authenticate and try again.');
+      } else {
+        LoggingService.logStatement('Error updating email: ${e.message}');
+      }
+    } catch (e) {
+      LoggingService.logStatement('Error updating email: $e');
+    }
+  }
 
   Future<void> logoutUser() async {
     try {

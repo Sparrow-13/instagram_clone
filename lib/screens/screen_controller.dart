@@ -1,11 +1,11 @@
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart'
+    show FaIcon, FontAwesomeIcons;
 import 'package:instagram_clone/screens/homepage.dart';
 import 'package:instagram_clone/screens/prelogin/login.dart';
 import 'package:instagram_clone/screens/profile/profile_page.dart';
 import 'package:instagram_clone/screens/reels_page.dart';
 import 'package:instagram_clone/screens/search_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart'
-    show FaIcon, FontAwesomeIcons;
 import 'package:provider/provider.dart';
 
 import '../context/global_context.dart';
@@ -21,14 +21,6 @@ class ScreenController extends StatefulWidget {
 class _ScreenControllerState extends State<ScreenController> {
   int currentIndex = 0;
 
-  List screens = [
-    HomePage(),
-    SearchScreen(),
-    NotificationScreen(),
-    ReelsScreen(),
-    ProfileScreen()
-  ];
-
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<GlobalContext>(context);
@@ -36,6 +28,13 @@ class _ScreenControllerState extends State<ScreenController> {
     if (user == null) {
       return Login();
     }
+    List screens = [
+      HomePage(),
+      SearchScreen(),
+      NotificationScreen(loggedInUser: user),
+      ReelsScreen(),
+      ProfileScreen()
+    ];
     return Scaffold(
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: currentIndex,

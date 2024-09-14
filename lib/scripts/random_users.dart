@@ -10,7 +10,7 @@ import '../utils/log_utility.dart';
 void createRandomUsers(int count) async {
   UserService userService = UserService();
   final faker = Faker();
-
+  var createdUsers = [];
   for (int i = 0; i < count; i++) {
     String randomGender =
         (i % 2 == 0) ? 'men' : 'women'; // Alternate between men and women
@@ -32,8 +32,9 @@ void createRandomUsers(int count) async {
     );
 
     await userService.addUser(user);
+    createdUsers.add(user);
   }
-
+  LoggingService.logStatement(createdUsers.toString());
   LoggingService.logStatement('$count random users have been created and added to Firestore.');
 }
 

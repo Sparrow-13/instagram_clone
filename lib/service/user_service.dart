@@ -21,27 +21,40 @@ class UserService with ChangeNotifier {
     await docRef.update({'id': docId});
   }
 
-  Future<void> getAllUser() {
-    return usersCollection.get().then((QuerySnapshot snapshot) {
-      for (var doc in snapshot.docs) {
-        LoggingService.logStatement('${doc.id} => ${doc.data()}');
-      }
-    }).catchError((error) {
+  Future<List<User>> getAllUsers() async {
+    try {
+      QuerySnapshot snapshot = await usersCollection.get();
+
+      // Map the documents into a list of User objects
+      List<User> users = snapshot.docs.map((doc) {
+        return User.fromFireStore(doc);
+      }).toList();
+
+      return users;
+    } catch (error) {
       LoggingService.logStatement("Failed to fetch users: $error");
-      return null;
-    });
+      return [];
+    }
   }
 
   Future<List<User>> getUsersFromIds(List<String> userIds) async {
     List<User> users = [];
-    for (String userId in userIds) {
-      User? user = await getUserById(userId);
-      if (user != null) {
-        users.add(user);
-      }
+    int batchSize = 10; // Batch size
+
+    // Split the list of userIds into batches of 10
+    for (int i = 0; i < userIds.length; i += batchSize) {
+      List<String> batch = userIds.sublist(i, i + batchSize > userIds.length ? userIds.length : i + batchSize);
+
+      // Fetch users for the current batch concurrently
+      List<User?> fetchedUsers = await Future.wait(batch.map((userId) => getUserById(userId)));
+
+      // Filter out null values and add the found users to the list
+      users.addAll(fetchedUsers.whereType<User>());
     }
+
     return users;
   }
+
 
 // Example usage:
   Future<void> fetchAndPrintFollowers(String userId) async {
@@ -200,4 +213,6 @@ class UserService with ChangeNotifier {
 
     return users;
   }
+
+  fetchUsersOtherThanUsersFollowing(User user) {}
 }

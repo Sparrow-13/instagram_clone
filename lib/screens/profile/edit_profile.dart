@@ -64,22 +64,18 @@ class _EditProfileState extends State<EditProfile> {
     user.bio = bioController.text;
     user.fullName = fullNameController.text;
 
-    if (user.userName == updatedUserName) {
-      // No async gaps here
-      await UserService().updateUserByEmail(user);
-      _updateUserAndNavigate('Profile updated successfully!');
-    } else {
-      // Await call introduces an async gap
+    if (user.userName != updatedUserName) {
       var isUserNameAvailable = (await UserService().getUserByUsername(userNameController.text) == null);
-
       if (isUserNameAvailable) {
         user.userName = userNameController.text;
-        await UserService().updateUserByEmail(user);
-        _updateUserAndNavigate('Profile updated successfully!');
       } else {
-        _showSnackBar();
+        _showSnackBar("UserName Not Available!");
+        return;
       }
     }
+    await UserService().updateUserByEmail(user);
+    _updateUserAndNavigate('Profile updated successfully!');
+    _showSnackBar("Successfully Updated Details");
   }
 
   /// Helper method to update user in provider and cache and then navigate back
@@ -91,11 +87,11 @@ class _EditProfileState extends State<EditProfile> {
     }
   }
 
-  void _showSnackBar() {
+  void _showSnackBar(String title) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          "UserName not Available",
+          title,
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.black,

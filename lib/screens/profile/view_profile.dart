@@ -273,13 +273,15 @@ class _ViewProfileState extends State<ViewProfile> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text("Discover people",
+                                      Text("Discover People",
                                           style: GoogleFonts.roboto(
+                                            fontWeight: FontWeight.bold,
                                               color: Colors.white)),
                                       InkWell(
                                         child: Text(
                                           "see more",
                                           style: GoogleFonts.roboto(
+
                                               color: Colors.blueAccent),
                                         ),
                                       ),
@@ -290,7 +292,7 @@ class _ViewProfileState extends State<ViewProfile> {
                                   ),
                                   SingleChildScrollView(
                                       scrollDirection: Axis.horizontal,
-                                      child: SuggestionCardService())
+                                      child: SuggestionCardService(user: widget.user,))
                                 ],
                               ),
                             ),

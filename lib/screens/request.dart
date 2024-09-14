@@ -6,9 +6,9 @@ import '../service/user_service.dart';
 import '../utils/log_utility.dart';
 
 class Request extends StatefulWidget {
-  final User user;
+  final User loggedInUser;
 
-  const Request({super.key, required this.user});
+  const Request({super.key, required this.loggedInUser});
 
   @override
   State<Request> createState() => _RequestState();
@@ -69,7 +69,7 @@ class _RequestState extends State<Request> {
       // Fetch from cache first
       List<User>? cachedRequest =
           await _cacheService.getAssociatedUsersFromCache(
-              widget.user.userName, CacheService.requestBoxName);
+              widget.loggedInUser.userName, CacheService.requestBoxName);
 
       if (cachedRequest != null && cachedRequest.isNotEmpty) {
         setState(() {
@@ -78,7 +78,8 @@ class _RequestState extends State<Request> {
           _isLoading = false;
           _hasMore = cachedRequest.length >= _pageSize;
           _isCacheExhausted = cachedRequest.length <
-              widget.user.request.length; // Check if cache covers all data
+              widget.loggedInUser.request
+                  .length; // Check if cache covers all data
         });
         LoggingService.logStatement(
             "_RequestState - _fetchInitialRequest: Fetched request from cache.");
@@ -112,7 +113,8 @@ class _RequestState extends State<Request> {
             _filteredRequest = _request.sublist(0, startIndex + _pageSize);
             _isLoading = false;
             _page++;
-            _hasMore = _filteredRequest.length < widget.user.request.length;
+            _hasMore =
+                _filteredRequest.length < widget.loggedInUser.request.length;
           });
           return;
         } else {
@@ -135,7 +137,7 @@ class _RequestState extends State<Request> {
     int startIndex = page * _pageSize;
     int endIndex = startIndex + _pageSize;
 
-    if (startIndex >= widget.user.request.length) {
+    if (startIndex >= widget.loggedInUser.request.length) {
       setState(() {
         _hasMore = false;
         _isLoading = false;
@@ -143,10 +145,10 @@ class _RequestState extends State<Request> {
       return;
     }
 
-    List<String> userIdsSubset = widget.user.request.sublist(
+    List<String> userIdsSubset = widget.loggedInUser.request.sublist(
       startIndex,
-      endIndex > widget.user.request.length
-          ? widget.user.request.length
+      endIndex > widget.loggedInUser.request.length
+          ? widget.loggedInUser.request.length
           : endIndex,
     );
 
@@ -154,7 +156,9 @@ class _RequestState extends State<Request> {
         "_RequestState - _fetchRequestFromDatabase: Fetching request from index $startIndex to $endIndex.");
 
     List<User> moreRequest = await UserService().getUsersFromUserIds(
-        widget.user.userName, userIdsSubset, CacheService.requestBoxName);
+        widget.loggedInUser.userName,
+        userIdsSubset,
+        CacheService.requestBoxName);
 
     // Handle duplicates in the fetched data
     for (var newRequest in moreRequest) {
@@ -177,21 +181,63 @@ class _RequestState extends State<Request> {
     });
   }
 
-  void _handleConfirm(User user) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Confirmed ${user.userName}\'s Request')),
-    );
-    // Handle confirm action
-    LoggingService.logStatement(
-        "_RequestState - _handleConfirm: Confirming request for ${user.userName}");
+  void removeUserFromList(User user) {
+    setState(() {
+      _filteredRequest.remove(user);
+    });
   }
 
-  void _handleReject(User user) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Deleted ${user.userName}\'s Request')),
-    );
-    LoggingService.logStatement(
-        "_RequestState - _handleReject: Rejecting request for ${user.userName}");
+  void _handleConfirm(User user) async {
+    try {
+      widget.loggedInUser.followers.add(user.id);
+      await UserService().updateUserByEmail(widget.loggedInUser);
+
+      if (!mounted) return; // Check if the widget is still mounted
+
+      removeUserFromList(user);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Confirmed ${user.userName}\'s request')),
+      );
+
+      LoggingService.logStatement(
+          "_RequestState - _handleConfirm: Confirmed request for ${user.userName}");
+    } catch (e) {
+      if (!mounted) return; // Check if the widget is still mounted
+      LoggingService.logStatement(
+          "_RequestState - _handleConfirm: Failed to confirm request for ${user.userName} - $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text('Failed to confirm request for ${user.userName}')),
+      );
+    }
+  }
+
+  void _handleReject(User user) async {
+    try {
+      widget.loggedInUser.request.remove(user.id);
+      await UserService().updateUserByEmail(widget.loggedInUser);
+
+      if (!mounted) return; // Check if the widget is still mounted
+
+      removeUserFromList(user);
+      _cacheService.saveUserToCache(user);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Deleted ${user.userName}\'s request')),
+      );
+
+      LoggingService.logStatement(
+          "_RequestState - _handleReject: Rejected request for ${user.userName}");
+    } catch (e) {
+      if (!mounted) return; // Check if the widget is still mounted
+      LoggingService.logStatement(
+          "_RequestState - _handleReject: Failed to reject request for ${user.userName} - $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text('Failed to reject request for ${user.userName}')),
+      );
+    }
   }
 
   @override

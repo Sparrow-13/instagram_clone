@@ -6,10 +6,10 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:instagram_clone/context/global_context.dart';
-import 'package:instagram_clone/screens/request.dart';
 import 'package:instagram_clone/screens/prelogin/login.dart';
 import 'package:instagram_clone/screens/profile/edit_profile.dart';
 import 'package:instagram_clone/screens/profile/people_tabview.dart';
+import 'package:instagram_clone/screens/request.dart';
 import 'package:instagram_clone/screens/specific_post.dart';
 import 'package:instagram_clone/service/logout_service.dart';
 import 'package:instagram_clone/service/suggestion_service.dart';
@@ -463,7 +463,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         SizedBox(height: 10),
                         SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
-                            child: SuggestionCardService())
+                            child: SuggestionCardService(user: user))
                       ],
                     ),
                   ),
@@ -636,7 +636,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void navigateToRequestPage(BuildContext context, User user) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => Request(user: user)),
+      MaterialPageRoute(builder: (context) => Request(loggedInUser: user)),
     );
   }
 }
