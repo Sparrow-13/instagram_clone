@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:instagram_clone/components/vertical_space.dart';
 
 class SuggestionPersonCard extends StatefulWidget {
   final String username;
   final String imageUrl;
   final String status;
-  final VoidCallback onSelect;
   final VoidCallback onRemove;
 
   const SuggestionPersonCard(
@@ -14,7 +12,6 @@ class SuggestionPersonCard extends StatefulWidget {
       required this.username,
       required this.imageUrl,
       required this.status,
-      required this.onSelect,
       required this.onRemove});
 
   @override
@@ -30,18 +27,14 @@ class _SuggestionPersonCardState extends State<SuggestionPersonCard> {
   }
 
   Widget suggestionCard() {
-    return InkWell(
-      onTap: widget.onSelect,
+    return Padding(
+      padding: const EdgeInsets.only(right: 10),
       child: Container(
-        width: 170,
-        // height: 210,
-        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-        margin: EdgeInsets.only(right: 5),
+        width: 150,
+        height: 210,
         decoration: BoxDecoration(
-          color: Colors.white12, // Move the color inside BoxDecoration
-          border: Border.all(width: 1),
-          borderRadius: BorderRadius.circular(5.0),
-        ),
+            border: Border.all(width: 1, color: Colors.grey.shade800),
+            borderRadius: BorderRadius.circular(5.0)),
         child: Column(
           children: [
             Align(
@@ -58,9 +51,6 @@ class _SuggestionPersonCardState extends State<SuggestionPersonCard> {
               radius: 45,
               backgroundImage: NetworkImage(widget.imageUrl),
             ),
-            VerticalSpace(
-              height: 5,
-            ),
             Text(
               widget.username,
               style: GoogleFonts.roboto(
@@ -68,35 +58,27 @@ class _SuggestionPersonCardState extends State<SuggestionPersonCard> {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-            VerticalSpace(
-              height: 5,
-            ),
             Text(
               widget.status,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: GoogleFonts.roboto(color: Colors.white, fontSize: 11),
             ),
-            VerticalSpace(
-              height: 5,
-            ),
+            // SizedBox(height: 10),
             ElevatedButton(
               onPressed: () => setState(() => _flag = !_flag),
               style: ElevatedButton.styleFrom(
-                backgroundColor: _flag ? Colors.blue : Colors.grey,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8), // Small corner radius
-                ),
+                backgroundColor:
+                    _flag ? Colors.blue : Colors.grey, // This is what you need!
               ),
-              child: SizedBox(
-                width: 100,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 0),
                 child: Text(
-                  _flag ? "Follow" : "Requested",
+                  _flag ? "Follow" : "requested",
                   style: TextStyle(color: Colors.white),
-                  textAlign: TextAlign.center,
                 ),
               ),
-            ),
+            )
           ],
         ),
       ),

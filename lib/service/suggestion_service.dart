@@ -1,92 +1,76 @@
+import 'dart:math';
+
+import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram_clone/service/user_service.dart';
 
 import '../components/person_suggestion_card.dart';
-import '../entity/user/user.dart';
-import '../screens/profile/view_profile.dart';
 
 class SuggestionCardService extends StatefulWidget {
-  const SuggestionCardService({super.key, required this.user});
-
-  final User user;
+  const SuggestionCardService({super.key});
 
   @override
   State<SuggestionCardService> createState() => _SuggestionCardServiceState();
 }
 
 class _SuggestionCardServiceState extends State<SuggestionCardService> {
-  List<User> unfollowedList = [];
-  bool isLoading = true;
+  String baseProfileURL = "https://randomuser.me/api/portraits/";
+  Faker faker = Faker();
+  List<Map<String, String>> cards = [];
 
   @override
   void initState() {
     super.initState();
-    _loadUnfollowedUsers();
+    cards = generateList(); // Initialize cards in initState
   }
 
-  Future<void> _loadUnfollowedUsers() async {
-    List<User> fetchedUnfollowedUsers = await fetchUnfollowedUsers(widget.user);
-
-    // Limit to 10 users only
-    setState(() {
-      unfollowedList = fetchedUnfollowedUsers.take(10).toList();
-      isLoading = false;
-    });
+  List<Map<String, String>> generateList() {
+    return List.generate(
+        10,
+        (index) => {
+              'username': randomName(),
+              'imageUrl': randomProfileImage(),
+              'status': randomProfileLine(),
+            });
   }
 
   void removeCard(int index) {
     setState(() {
-      unfollowedList.removeAt(index);
+      cards.removeAt(index);
     });
-  }
-
-  void selectProfile(int index) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => ViewProfile(user: unfollowedList[index])),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
-    if (isLoading) {
-      return const Center(child: CircularProgressIndicator());
+    return Row(
+      children: List.generate(
+        cards.length,
+        (index) => SuggestionPersonCard(
+          username: cards[index]['username']!,
+          imageUrl: cards[index]['imageUrl']!,
+          status: cards[index]['status']!,
+          onRemove: () => removeCard(index), // Pass callback to card
+        ),
+      ),
+    );
+  }
+
+  String randomProfileImage() {
+    int rand = Random().nextInt(50);
+    if (rand % 2 == 0) {
+      return "$baseProfileURL/women/$rand.jpg";
     }
-
-    return unfollowedList.isEmpty
-        ? const Text("No suggestions available",
-            style: TextStyle(color: Colors.white))
-        : Row(
-            children: List.generate(
-              unfollowedList.length,
-              (index) => SuggestionPersonCard(
-                username: unfollowedList[index].userName,
-                imageUrl: unfollowedList[index].imageUrl,
-                status: 'Suggested',
-                onSelect: () => selectProfile(index),
-                onRemove: () => removeCard(index),
-              ),
-            ),
-          );
+    return "$baseProfileURL/men/$rand.jpg";
   }
 
-  Future<List<User>> fetchUnfollowedUsers(User user) async {
-    // Step 1: Fetch all users
-    List<User> allUsers = await UserService().getAllUsers();
-
-    // Step 2: Filter out users the logged-in user already follows
-    List<String> loggedInUserFollowing = user.following;
-    List<User> unfollowedUsers =
-        getUnfollowedUsers(allUsers, loggedInUserFollowing);
-
-    return unfollowedUsers;
+  String randomName() {
+    return "${faker.person.firstName()} ${faker.person.lastName()}";
   }
 
-  List<User> getUnfollowedUsers(
-      List<User> allUsers, List<String> loggedInUserFollowing) {
-    return allUsers
-        .where((user) => !loggedInUserFollowing.contains(user.id))
-        .toList();
+  String randomProfileLine() {
+    int rand = Random().nextInt(2);
+    if (rand % 2 == 0) {
+      return "New to Instagram";
+    }
+    return "Followed By ${faker.person.firstName()}";
   }
 }
